@@ -3,21 +3,7 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngridientsSection from "../ingridients-section/ingridients-section"
 import style from './burger-ingridients.module.css'
 import PropTypes from 'prop-types';
-
-const ingridientPropTypes = PropTypes.shape({
-   _id: PropTypes.string.isRequired,
-   type: PropTypes.string.isRequired,
-   proteins: PropTypes.number.isRequired,
-   price: PropTypes.number.isRequired,
-   name: PropTypes.string.isRequired,
-   image_mobile: PropTypes.string.isRequired,
-   image_large: PropTypes.string.isRequired,
-   image: PropTypes.string.isRequired,
-   fat: PropTypes.number.isRequired,
-   carbohydrates: PropTypes.number.isRequired,
-   calories: PropTypes.number.isRequired,
-   __v: PropTypes.number.isRequired,
-})
+import { ingridientPropTypes } from '../../utils/prop-types.js'
 
 export default function BurgerIngridients({ ingridients }) {
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
@@ -42,5 +28,5 @@ export default function BurgerIngridients({ ingridients }) {
 }
 
 BurgerIngridients.propTypes = {
-   ingridients: PropTypes.arrayOf(ingridientPropTypes).isRequired
+   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired
 }

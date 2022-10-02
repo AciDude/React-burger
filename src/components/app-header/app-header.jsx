@@ -11,7 +11,7 @@ export default function AppHeader() {
             <nav>
                <ul className={style.list}>
                   <li className='ml-2'>
-                     <ButtonHeader isCurrent='true'>
+                     <ButtonHeader isCurrent={true}>
                         <BurgerIcon type="primary" />
                         <span className='ml-2'>Конструктор</span>
                      </ButtonHeader>

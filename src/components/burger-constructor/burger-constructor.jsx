@@ -2,21 +2,7 @@ import React from "react";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './burger-constructor.module.css'
 import PropTypes from 'prop-types';
-
-const ingridientPropTypes = PropTypes.shape({
-   _id: PropTypes.string.isRequired,
-   type: PropTypes.string.isRequired,
-   proteins: PropTypes.number.isRequired,
-   price: PropTypes.number.isRequired,
-   name: PropTypes.string.isRequired,
-   image_mobile: PropTypes.string.isRequired,
-   image_large: PropTypes.string.isRequired,
-   image: PropTypes.string.isRequired,
-   fat: PropTypes.number.isRequired,
-   carbohydrates: PropTypes.number.isRequired,
-   calories: PropTypes.number.isRequired,
-   __v: PropTypes.number.isRequired,
-})
+import { ingridientPropTypes } from '../../utils/prop-types.js'
 
 export default function BurgerConstructor({ ingridients }) {
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
@@ -38,9 +24,9 @@ export default function BurgerConstructor({ ingridients }) {
                   thumbnail={randomBun.image_mobile}
                />
             </div>
-            <div className={style.ingridients}>
+            <ul className={style.ingridients}>
                {otherRandomIngridients.map((ingridient, index, array) => (
-                  <div
+                  <li
                      className={index != array.length - 1 ? `${style.ingridient} mb-4 pl-4` : `${style.ingridient} pl-4`}
                      key={ingridient._id}
                   >
@@ -50,9 +36,9 @@ export default function BurgerConstructor({ ingridients }) {
                         price={ingridient.price}
                         thumbnail={ingridient.image_mobile}
                      />
-                  </div>
+                  </li>
                ))}
-            </div>
+            </ul>
             <div className="mt-4 pl-4 pr-4">
                <ConstructorElement
                   type="bottom"
@@ -76,5 +62,5 @@ export default function BurgerConstructor({ ingridients }) {
 }
 
 BurgerConstructor.propTypes = {
-   ingridients: PropTypes.arrayOf(ingridientPropTypes).isRequired
+   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired
 }

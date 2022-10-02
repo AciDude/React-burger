@@ -1,6 +1,8 @@
 import React from 'react'
 import IngridientCard from '../ingridient-card/ingridient-card'
 import style from './ingridients-section.module.css'
+import PropTypes from 'prop-types'
+import { ingridientPropTypes } from '../../utils/prop-types.js'
 
 export default function IngridientsSection({ title, ingridients }) {
 
@@ -14,4 +16,9 @@ export default function IngridientsSection({ title, ingridients }) {
          </div>
       </div>
    )
+}
+
+IngridientsSection.propTypes = {
+   title: PropTypes.string.isRequired,
+   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired,
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingridient-card.module.css'
+import PropTypes from 'prop-types'
+import { ingridientPropTypes } from '../../utils/prop-types.js'
 
 export default function IngridientCard({ ingridient, count = 0 }) {
 
@@ -23,4 +25,9 @@ export default function IngridientCard({ ingridient, count = 0 }) {
          )}
       </button>
    )
+}
+
+IngridientCard.propTypes = {
+   ingridient: ingridientPropTypes().isRequired,
+   count: PropTypes.number,
 }
