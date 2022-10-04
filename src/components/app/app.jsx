@@ -5,8 +5,11 @@ import BurgerIngridients from '../burger-ingridients/burger-ingridients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import data from '../../utils/data.js'
 
+import IngridientDetails from '../ingridient-details/ingridient-details.jsx';
+
 function App() {
   const ingridients = data()
+  console.log(ingridients)
   return (
     <div>
       <AppHeader />
@@ -14,6 +17,7 @@ function App() {
         <BurgerIngridients ingridients={ingridients} />
         <BurgerConstructor ingridients={ingridients} />
       </main>
+      <IngridientDetails {...ingridients[0]} />
     </div>
   );
 }

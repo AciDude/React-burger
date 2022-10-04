@@ -1,0 +1,14 @@
+.block {
+   display: flex;
+   flex-flow: column;
+   align-items: center;
+}
+.list {
+   display: flex;
+   column-gap: 20px;
+}
+.listItem {
+   display: flex;
+   flex-flow: column;
+   align-items: center;
+}
