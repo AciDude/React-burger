@@ -10,9 +10,10 @@ export default function IngridientsSection({ title, ingridients }) {
       <div className="mb-10 mt-10 ml-4 mr-4">
          <h2 className="text text_type_main-medium mb-6">{title}</h2>
          <div className={style.ingridients}>
-            {ingridients.map(ingridient => (
-               <IngridientCard key={ingridient._id} ingridient={ingridient} />
-            ))}
+            {ingridients.map(ingridient => {
+               const {image_mobile, type, __v, _id, ...otherProps} = ingridient
+            return (<IngridientCard key={_id} {...otherProps} />)
+            })}
          </div>
       </div>
    )

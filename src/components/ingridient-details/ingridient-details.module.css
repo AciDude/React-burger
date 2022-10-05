@@ -2,13 +2,21 @@
    display: flex;
    flex-flow: column;
    align-items: center;
+   justify-content: center;
+   width: 520px;
+   text-align: center;
 }
 .list {
-   display: flex;
+   display: grid;
+   grid-template-columns:  repeat(4, 1fr);
    column-gap: 20px;
+   width: 100%;
 }
 .listItem {
    display: flex;
    flex-flow: column;
    align-items: center;
+}
+.image {
+   min-height: 240px;
 }

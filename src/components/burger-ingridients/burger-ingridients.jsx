@@ -2,7 +2,7 @@ import React from "react"
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngridientsSection from "../ingridients-section/ingridients-section"
 import style from './burger-ingridients.module.css'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { ingridientPropTypes } from '../../utils/prop-types.js'
 
 export default function BurgerIngridients({ ingridients }) {

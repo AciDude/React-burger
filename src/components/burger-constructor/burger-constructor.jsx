@@ -1,63 +1,80 @@
 import React from "react";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './burger-constructor.module.css'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { ingridientPropTypes } from '../../utils/prop-types.js'
+import Modal from "../UI/modal/modal"
+import OrderDetails from "../order-details/order-details"
+import useSwitchModal from '../hooks/useSwitchModal.js'
 
 export default function BurgerConstructor({ ingridients }) {
+   const[isModalShowed, openModal, closeModal] = useSwitchModal()
+
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
    const randomBun = buns[Math.floor(Math.random() * buns.length)]
    const otherRandomIngridients = ingridients.filter(el => Math.round(Math.random() * 0.65))
-   const total = randomBun.price + otherRandomIngridients.reduce(
+   const total = randomBun?.price + otherRandomIngridients.reduce(
       (sum, ingridient) => ingridient.price + sum,
       0
    )
+
    return (
-      <section className={style.section}>
-         <div className={`${style.burger} pt-25 mb-10`}>
-            <div className="mb-4 pl-4 pr-4">
-               <ConstructorElement
-                  type="top"
-                  isLocked={true}
-                  text={`${randomBun.name} (верх)`}
-                  price={randomBun.price}
-                  thumbnail={randomBun.image_mobile}
-               />
+      <>
+         <section className={style.section}>
+            <div className={`${style.burger} pt-25 mb-10`}>
+               <div className="mb-4 pl-4 pr-4">
+                  <ConstructorElement
+                     type="top"
+                     isLocked={true}
+                     text={`${randomBun?.name} (верх)`}
+                     price={randomBun?.price}
+                     thumbnail={randomBun?.image_mobile}
+                  />
+               </div>
+               <ul className={style.ingridients}>
+                  {otherRandomIngridients.map((ingridient, index, array) => (
+                     <li
+                        className={index != array.length - 1 ? `${style.ingridient} mb-4 pl-4` : `${style.ingridient} pl-4`}
+                        key={ingridient._id}
+                     >
+                        <DragIcon type="primary" />
+                        <ConstructorElement
+                           text={`${ingridient.name}`}
+                           price={ingridient.price}
+                           thumbnail={ingridient.image_mobile}
+                        />
+                     </li>
+                  ))}
+               </ul>
+               <div className="mt-4 pl-4 pr-4">
+                  <ConstructorElement
+                     type="bottom"
+                     isLocked={true}
+                     text={`${randomBun?.name} (низ)`}
+                     price={randomBun?.price}
+                     thumbnail={randomBun?.image_mobile}
+                  />
+               </div>
             </div>
-            <ul className={style.ingridients}>
-               {otherRandomIngridients.map((ingridient, index, array) => (
-                  <li
-                     className={index != array.length - 1 ? `${style.ingridient} mb-4 pl-4` : `${style.ingridient} pl-4`}
-                     key={ingridient._id}
-                  >
-                     <DragIcon type="primary" />
-                     <ConstructorElement
-                        text={`${ingridient.name}`}
-                        price={ingridient.price}
-                        thumbnail={ingridient.image_mobile}
-                     />
-                  </li>
-               ))}
-            </ul>
-            <div className="mt-4 pl-4 pr-4">
-               <ConstructorElement
-                  type="bottom"
-                  isLocked={true}
-                  text={`${randomBun.name} (низ)`}
-                  price={randomBun.price}
-                  thumbnail={randomBun.image_mobile}
-               />
+            <div className={`${style.order} mr-4`}>
+               <div className="text_type_digits-medium mr-10">
+                  {total} <CurrencyIcon type="primary" />
+               </div>
+               <Button 
+                  type="primary" 
+                  size="medium" 
+                  htmlType='button'
+                  onClick={openModal}
+               >
+                  Оформить заказ
+               </Button>
             </div>
-         </div>
-         <div className={`${style.order} mr-4`}>
-            <div className="text_type_digits-medium mr-10">
-               {total} <CurrencyIcon type="primary" />
-            </div>
-            <Button type="primary" size="medium" htmlType='button'>
-               Оформить заказ
-            </Button>
-         </div>
-      </section>
+         </section>
+         {isModalShowed && 
+         (<Modal closeModal={closeModal}>
+            <OrderDetails/>
+         </Modal>)}
+      </>
    )
 }
 
