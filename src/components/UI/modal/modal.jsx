@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, { useEffect } from "react"
 import ReactDOM from 'react-dom'
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './modal.module.css'
@@ -7,8 +7,8 @@ import PropTypes from 'prop-types'
 
 const modalRoot = document.getElementById('modal')
 
-export default function Modal({ children, closeModal, isIngridient = false }) {
-   const pressKey = e => e.keyCode === 27 && closeModal()
+export default function Modal({ children, closeModal, title = false, isModalShowed }) {
+   const pressKey = e => e.key === 'Escape' && closeModal()
 
    useEffect(() => {
       const body = document.body
@@ -18,11 +18,11 @@ export default function Modal({ children, closeModal, isIngridient = false }) {
       }
    }, [])
 
-   return ReactDOM.createPortal(
-      <>
-         <div className={style.modal}>
-            {isIngridient && (
-               <p className={`${style.title} text text_type_main-large ml-10 mr-10 mt-10`}>Детали ингредиента</p>
+   return isModalShowed && ReactDOM.createPortal(
+      <div className={style.modal}>
+         <div className={style.content}>
+            {title && (
+               <p className={`${style.title} text text_type_main-large ml-10 mr-10 mt-10`}>{title}</p>
             )}
             {children}
             <button
@@ -32,8 +32,8 @@ export default function Modal({ children, closeModal, isIngridient = false }) {
             ><CloseIcon type="primary" />
             </button>
          </div>
-         <ModalOverlay closeModal={closeModal}/>
-      </>,
+         <ModalOverlay closeModal={closeModal} />
+      </div>,
       modalRoot
    )
 }
@@ -41,5 +41,5 @@ export default function Modal({ children, closeModal, isIngridient = false }) {
 Modal.propTypes = {
    children: PropTypes.node.isRequired,
    closeModal: PropTypes.func.isRequired,
-   isIngridient: PropTypes.bool,
+   title: PropTypes.string,
 }

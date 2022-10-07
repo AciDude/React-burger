@@ -5,7 +5,7 @@ import style from './burger-ingridients.module.css'
 import PropTypes from 'prop-types'
 import { ingridientPropTypes } from '../../utils/prop-types.js'
 
-export default function BurgerIngridients({ ingridients }) {
+const BurgerIngridients = React.memo(function ({ ingridients, openModal }) {
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
    const mains = ingridients.filter(ingridient => ingridient.type === 'main')
    const sauces = ingridients.filter(ingridient => ingridient.type === 'sauce')
@@ -19,14 +19,17 @@ export default function BurgerIngridients({ ingridients }) {
             <Tab >Начинки</Tab>
          </div>
          <div className={style.ingridients}>
-            <IngridientsSection title='Булки' ingridients={buns} />
-            <IngridientsSection title='Соусы' ingridients={sauces} />
-            <IngridientsSection title='Начинки' ingridients={mains} />
+            <IngridientsSection title='Булки' ingridients={buns} openModal={openModal} />
+            <IngridientsSection title='Соусы' ingridients={sauces} openModal={openModal} />
+            <IngridientsSection title='Начинки' ingridients={mains} openModal={openModal} />
          </div>
       </section>
    )
-}
+})
 
 BurgerIngridients.propTypes = {
-   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired
+   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired,
+   openModal: PropTypes.func.isRequired,
 }
+
+export default BurgerIngridients

@@ -4,16 +4,16 @@ import style from './ingridients-section.module.css'
 import PropTypes from 'prop-types'
 import { ingridientPropTypes } from '../../utils/prop-types.js'
 
-export default function IngridientsSection({ title, ingridients }) {
+export default function IngridientsSection({ title, ingridients, openModal }) {
 
    return (
       <div className="mb-10 mt-10 ml-4 mr-4">
          <h2 className="text text_type_main-medium mb-6">{title}</h2>
          <div className={style.ingridients}>
-            {ingridients.map(ingridient => {
-               const {image_mobile, type, __v, _id, ...otherProps} = ingridient
-            return (<IngridientCard key={_id} {...otherProps} />)
-            })}
+            {ingridients.map(ingridient => (
+               <IngridientCard key={ingridient._id} ingridient={ingridient} openModal={openModal} />
+            )
+            )}
          </div>
       </div>
    )
@@ -22,4 +22,5 @@ export default function IngridientsSection({ title, ingridients }) {
 IngridientsSection.propTypes = {
    title: PropTypes.string.isRequired,
    ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired,
+   openModal: PropTypes.func.isRequired,
 }
