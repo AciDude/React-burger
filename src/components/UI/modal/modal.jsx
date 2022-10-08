@@ -7,18 +7,20 @@ import PropTypes from 'prop-types'
 
 const modalRoot = document.getElementById('modal')
 
-export default function Modal({ children, closeModal, title = false, isModalShowed }) {
-   const pressKey = e => e.key === 'Escape' && closeModal()
+export default function Modal({ children, closeModal, title = false, isOpen }) {
 
    useEffect(() => {
-      const body = document.body
-      body.addEventListener('keydown', pressKey)
-      return () => {
-         body.removeEventListener('keydown', pressKey)
+      if (isOpen) {
+         const pressKey = e => e.key === 'Escape' && closeModal()
+         const body = document.body
+         body.addEventListener('keydown', pressKey)
+         return () => {
+            body.removeEventListener('keydown', pressKey)
+         }
       }
-   }, [])
+   }, [isOpen])
 
-   return isModalShowed && ReactDOM.createPortal(
+   return isOpen && ReactDOM.createPortal(
       <div className={style.modal}>
          <div className={style.content}>
             {title && (
@@ -42,4 +44,5 @@ Modal.propTypes = {
    children: PropTypes.node.isRequired,
    closeModal: PropTypes.func.isRequired,
    title: PropTypes.string,
+   isOpen: PropTypes.bool.isRequired,
 }

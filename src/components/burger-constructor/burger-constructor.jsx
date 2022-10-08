@@ -11,7 +11,9 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
 
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
    const randomBun = buns[Math.floor(Math.random() * buns.length)]
-   const otherRandomIngridients = ingridients.filter(el => Math.round(Math.random() * 0.65))
+   const otherRandomIngridients = ingridients.filter(ingridient => {
+      return ingridient.type !== 'bun' && Math.round(Math.random() * 0.65)
+   })
    const total = randomBun?.price + otherRandomIngridients.reduce(
       (sum, ingridient) => ingridient.price + sum,
       0
