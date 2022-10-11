@@ -1,13 +1,16 @@
-import React from "react";
+import React from "react"
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingridient-card.module.css'
 import PropTypes from 'prop-types'
 import { ingridientPropTypes } from '../../utils/prop-types.js'
+import IngridientDetails from "../ingridient-details/ingridient-details"
 
-export default function IngridientCard({ ingridient, count = 0 }) {
+export default function IngridientCard({ count = 0, ingridient, openModal }) {
+
+   const onClick = () => openModal(<IngridientDetails ingridient={ingridient} />, 'Детали ингридиента')
 
    return (
-      <button type="button" className={style.card}>
+      <button type="button" className={style.card} onClick={onClick}>
          <div className={`${style.image} ml-4 mr-4 mb-1`}>
             <img src={ingridient.image} alt={ingridient.name} />
          </div>
@@ -28,6 +31,7 @@ export default function IngridientCard({ ingridient, count = 0 }) {
 }
 
 IngridientCard.propTypes = {
-   ingridient: ingridientPropTypes().isRequired,
    count: PropTypes.number,
+   ingridient: ingridientPropTypes().isRequired,
+   openModal: PropTypes.func.isRequired,
 }

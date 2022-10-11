@@ -1,0 +1,13 @@
+.block {
+    display: flex;
+    flex-flow: column;
+    min-width: 520px;
+    align-items: center;
+    text-align: center;
+}
+.number {
+    text-shadow: rgba(76, 76, 255, 1) 0 0 20px;
+}
+.image {
+    min-height: 120px;
+}

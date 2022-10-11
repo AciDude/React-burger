@@ -3,7 +3,7 @@ import style from './app-header.module.css'
 import { Logo, ProfileIcon, BurgerIcon, ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import ButtonHeader from '../UI/button-header/button-header.jsx'
 
-export default function AppHeader() {
+const AppHeader = React.memo(function () {
 
    return (
       <header className={`${style.header} pt-4 pb-4`}>
@@ -34,4 +34,6 @@ export default function AppHeader() {
          </div>
       </header>
    )
-}
+})
+
+export default AppHeader
