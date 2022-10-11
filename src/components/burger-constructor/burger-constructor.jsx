@@ -1,23 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './burger-constructor.module.css'
 import PropTypes from 'prop-types'
-import { ingridientPropTypes } from '../../utils/prop-types.js'
 import OrderDetails from "../order-details/order-details"
+import { IngridientsContext } from "../../utils/app-context"
+import { request } from "../../utils/request.js"
 
-const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
+const URL_ORDERS = 'https://norma.nomoreparties.space/api/orders'
 
-   const onClick = () => openModal(<OrderDetails />)
+const BurgerConstructor = React.memo(function ({ openModal }) {
+   const { ingridients } = useContext(IngridientsContext)
 
    const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
-   const randomBun = buns[Math.floor(Math.random() * buns.length)]
+   const bun = buns[Math.floor(Math.random() * buns.length)]
    const otherRandomIngridients = ingridients.filter(ingridient => {
       return ingridient.type !== 'bun' && Math.round(Math.random() * 0.65)
    })
-   const total = randomBun?.price + otherRandomIngridients.reduce(
+   const bunPrice = bun?.price ?? 0
+   const total = bunPrice * 2 + otherRandomIngridients.reduce(
       (sum, ingridient) => ingridient.price + sum,
       0
    )
+
+   const onClick = async () => {
+      try {
+         const ingridientsID = [...otherRandomIngridients.map(element => element._id), bun._id, bun._id]
+         const requestBody = { ingredients: ingridientsID }
+         const result = await request(URL_ORDERS, {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(requestBody)
+         })
+         openModal(<OrderDetails order={result.order.number} />)
+      } catch (err) {
+         console.error(err)
+      }
+   }
 
    return (
       <section className={style.section}>
@@ -26,9 +46,9 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
                <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={`${randomBun?.name} (верх)`}
-                  price={randomBun?.price}
-                  thumbnail={randomBun?.image_mobile}
+                  text={`${bun?.name ?? ''} (верх)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
                />
             </div>
             <ul className={style.ingridients}>
@@ -50,9 +70,9 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
                <ConstructorElement
                   type="bottom"
                   isLocked={true}
-                  text={`${randomBun?.name} (низ)`}
-                  price={randomBun?.price}
-                  thumbnail={randomBun?.image_mobile}
+                  text={`${bun?.name ?? ''} (низ)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
                />
             </div>
          </div>
@@ -74,7 +94,6 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
 })
 
 BurgerConstructor.propTypes = {
-   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired,
    openModal: PropTypes.func.isRequired,
 }
 

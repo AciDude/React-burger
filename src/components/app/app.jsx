@@ -6,6 +6,7 @@ import BurgerConstructor from '../burger-constructor/burger-constructor'
 import Modal from '../UI/modal/modal'
 import useModalControl from '../../hooks/use-modal-control.js'
 import { request } from '../../utils/request'
+import { IngridientsContext } from '../../utils/app-context'
 
 const URL_INGRIDIENTS = 'https://norma.nomoreparties.space/api/ingredients'
 
@@ -23,14 +24,15 @@ function App() {
     <>
       <AppHeader />
       <main className={style.main}>
-        <BurgerIngridients
-          ingridients={ingridients}
-          openModal={openModal}
-        />
-        <BurgerConstructor
-          ingridients={ingridients}
-          openModal={openModal}
-        />
+        <IngridientsContext.Provider value={{ ingridients, setIngridients }}>
+          <BurgerIngridients
+            ingridients={ingridients}
+            openModal={openModal}
+          />
+          <BurgerConstructor
+            openModal={openModal}
+          />
+        </IngridientsContext.Provider>
       </main>
       <Modal
         closeModal={closeModal}
