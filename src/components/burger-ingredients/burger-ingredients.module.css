@@ -4,19 +4,19 @@
 .tab {
    display: flex;
 }
-.ingridients {
+.ingredients {
    overflow-y: auto;
    overflow-x: hidden;
    max-height:  clamp(446px, calc(100vh - 354px), 746px);
 }
-.ingridients::-webkit-scrollbar-track {
+.ingredients::-webkit-scrollbar-track {
    background-color: #2F2F37;
 }
 
-.ingridients::-webkit-scrollbar {
+.ingredients::-webkit-scrollbar {
    width: 8px;
 }
 
-.ingridients::-webkit-scrollbar-thumb {
+.ingredients::-webkit-scrollbar-thumb {
    background: #8585AD;
 }

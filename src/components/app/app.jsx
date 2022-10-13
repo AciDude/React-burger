@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import AppHeader from '../app-header/app-header'
 import style from './app.module.css'
-import BurgerIngridients from '../burger-ingridients/burger-ingridients'
+import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import Modal from '../UI/modal/modal'
 import useModalControl from '../../hooks/use-modal-control.js'
 import { request } from '../../utils/request'
-import { IngridientsContext } from '../../utils/app-context'
+import { IngredientsContext } from '../../services/app-context'
 
-const URL_INGRIDIENTS = 'https://norma.nomoreparties.space/api/ingredients'
+const URL_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients'
 
 function App() {
-  const [ingridients, setIngridients] = useState([])
+  const [ingredients, setIngredients] = useState([])
   const [modalDetails, openModal, closeModal] = useModalControl()
 
   useEffect(() => {
-    request(URL_INGRIDIENTS)
-      .then(result => setIngridients(result.data))
+    request(URL_INGREDIENTS)
+      .then(result => setIngredients(result.data))
       .catch(err => console.error(err))
   }, [])
 
@@ -24,15 +24,15 @@ function App() {
     <>
       <AppHeader />
       <main className={style.main}>
-        <IngridientsContext.Provider value={{ ingridients, setIngridients }}>
-          <BurgerIngridients
-            ingridients={ingridients}
+          <BurgerIngredients
+            ingredients={ingredients}
             openModal={openModal}
           />
-          <BurgerConstructor
-            openModal={openModal}
-          />
-        </IngridientsContext.Provider>
+          <IngredientsContext.Provider value={{ ingredients, setIngredients }}>
+            <BurgerConstructor
+              openModal={openModal}
+            />
+        </IngredientsContext.Provider>
       </main>
       <Modal
         closeModal={closeModal}
