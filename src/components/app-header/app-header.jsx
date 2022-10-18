@@ -1,6 +1,7 @@
 import React from 'react'
 import style from './app-header.module.css'
-import { Logo, ProfileIcon, BurgerIcon, ListIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Logo, ProfileIcon, BurgerIcon, ListIcon } 
+   from '@ya.praktikum/react-developer-burger-ui-components'
 import ButtonHeader from '../UI/button-header/button-header.jsx'
 
 const AppHeader = React.memo(function () {

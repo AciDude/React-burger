@@ -1,23 +1,52 @@
-import React from "react";
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import React, { useContext, useMemo } from "react";
+import { ConstructorElement, DragIcon, CurrencyIcon, Button } 
+   from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './burger-constructor.module.css'
 import PropTypes from 'prop-types'
-import { ingridientPropTypes } from '../../utils/prop-types.js'
 import OrderDetails from "../order-details/order-details"
+import { IngredientsContext } from "../../services/app-context"
+import { request } from "../../utils/request.js"
 
-const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
+const URL_ORDERS = 'https://norma.nomoreparties.space/api/orders'
 
-   const onClick = () => openModal(<OrderDetails />)
+const BurgerConstructor = function ({ openModal }) {
+   const { ingredients } = useContext(IngredientsContext)
 
-   const buns = ingridients.filter(ingridient => ingridient.type === 'bun')
-   const randomBun = buns[Math.floor(Math.random() * buns.length)]
-   const otherRandomIngridients = ingridients.filter(ingridient => {
-      return ingridient.type !== 'bun' && Math.round(Math.random() * 0.65)
-   })
-   const total = randomBun?.price + otherRandomIngridients.reduce(
-      (sum, ingridient) => ingridient.price + sum,
-      0
-   )
+   const randomIngredients = useMemo(() => {
+      const buns = ingredients.filter(ingredient => ingredient.type === 'bun')
+      const bun = buns[Math.floor(Math.random() * buns.length)]
+      const otherRandomIngredients = ingredients.filter(ingredient => {
+         return ingredient.type !== 'bun' && Math.round(Math.random() * 0.65)
+      })
+      const bunPrice = bun?.price ?? 0
+      const total = bunPrice * 2 + otherRandomIngredients.reduce(
+         (sum, ingredient) => ingredient.price + sum,
+         0
+      )
+      return {bun, otherRandomIngredients, total}
+   }, [ingredients])
+   
+   const {bun, otherRandomIngredients, total} = randomIngredients
+
+   const onClick = async () => {
+      try {
+         const ingredientsId = [
+            ...otherRandomIngredients.map(element => element._id), 
+            bun._id, bun._id
+         ]
+         const requestBody = { ingredients: ingredientsId }
+         const result = await request(URL_ORDERS, {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(requestBody)
+         })
+         openModal(<OrderDetails order={result.order.number} />)
+      } catch (err) {
+         console.error(err)
+      }
+   }
 
    return (
       <section className={style.section}>
@@ -26,22 +55,22 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
                <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={`${randomBun?.name} (верх)`}
-                  price={randomBun?.price}
-                  thumbnail={randomBun?.image_mobile}
+                  text={`${bun?.name ?? ''} (верх)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
                />
             </div>
-            <ul className={style.ingridients}>
-               {otherRandomIngridients.map((ingridient, index, array) => (
+            <ul className={style.ingredients}>
+               {otherRandomIngredients.map(ingredient => (
                   <li
-                     className={index != array.length - 1 ? `${style.ingridient} mb-4 pl-4` : `${style.ingridient} pl-4`}
-                     key={ingridient._id}
+                     className={`${style.ingredient} pl-4`}
+                     key={ingredient._id}
                   >
                      <DragIcon type="primary" />
                      <ConstructorElement
-                        text={`${ingridient.name}`}
-                        price={ingridient.price}
-                        thumbnail={ingridient.image_mobile}
+                        text={`${ingredient.name}`}
+                        price={ingredient.price}
+                        thumbnail={ingredient.image_mobile}
                      />
                   </li>
                ))}
@@ -50,9 +79,9 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
                <ConstructorElement
                   type="bottom"
                   isLocked={true}
-                  text={`${randomBun?.name} (низ)`}
-                  price={randomBun?.price}
-                  thumbnail={randomBun?.image_mobile}
+                  text={`${bun?.name ?? ''} (низ)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
                />
             </div>
          </div>
@@ -71,10 +100,9 @@ const BurgerConstructor = React.memo(function ({ ingridients, openModal }) {
          </div>
       </section>
    )
-})
+}
 
 BurgerConstructor.propTypes = {
-   ingridients: PropTypes.arrayOf(ingridientPropTypes()).isRequired,
    openModal: PropTypes.func.isRequired,
 }
 

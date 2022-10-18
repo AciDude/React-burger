@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-export function ingridientPropTypes() {
+export function ingredientPropTypes() {
    return PropTypes.shape({
       _id: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,

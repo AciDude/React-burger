@@ -10,7 +10,7 @@
    align-items: flex-end;
    width: 100%;
 }
-.ingridient {
+.ingredient {
    display: flex;
    align-items: center;
    justify-content: flex-start;
@@ -20,38 +20,41 @@
    display: flex;
    align-items: center;
 }
-.ingridients {
+.ingredients {
    overflow-y: auto;
    overflow-x: hidden;
    max-height: 464px;
    width: 100%;
+   display: flex;
+   flex-flow: column;
+   gap: 16px;
 }
 @media (max-height: 1024px) {
-   .ingridients {
+   .ingredients {
       max-height: 368px;
    }
 }
 
 @media (max-height: 928px) {
-   .ingridients {
+   .ingredients {
       max-height: 272px;
    }
 }
 
 @media (max-height: 832px) {
-   .ingridients {
+   .ingredients {
       max-height: 176px;
    }
 }
 
-.ingridients::-webkit-scrollbar-track {
+.ingredients::-webkit-scrollbar-track {
    background-color: #2F2F37;
 }
 
-.ingridients::-webkit-scrollbar {
+.ingredients::-webkit-scrollbar {
    width: 8px;
 }
 
-.ingridients::-webkit-scrollbar-thumb {
+.ingredients::-webkit-scrollbar-thumb {
    background: #8585AD;
 }
