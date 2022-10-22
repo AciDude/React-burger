@@ -1,0 +1,39 @@
+.ingredients {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 464px;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+}
+
+@media (max-height: 1024px) {
+  .ingredients {
+    max-height: 368px;
+  }
+}
+
+@media (max-height: 928px) {
+  .ingredients {
+    max-height: 272px;
+  }
+}
+
+@media (max-height: 832px) {
+  .ingredients {
+    max-height: 176px;
+  }
+}
+
+.ingredients::-webkit-scrollbar-track {
+  background-color: #2F2F37;
+}
+
+.ingredients::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredients::-webkit-scrollbar-thumb {
+  background: #8585AD;
+}
