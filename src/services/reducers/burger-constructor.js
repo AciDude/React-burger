@@ -1,7 +1,8 @@
 import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
-  UPDATE_CONSTRUCTOR_LIST
+  UPDATE_CONSTRUCTOR_LIST,
+  CLEAR_CONSTRUCTOR_LIST
 } from '../actions/burger-constructor'
 
 const initialState = {
@@ -32,6 +33,13 @@ export const burgerConstructorReducer = (state = initialState, action) => {
       return {
         ...state,
         fillings: action.fillings
+      }
+    }
+    case CLEAR_CONSTRUCTOR_LIST: {
+      return {
+        ...state,
+        bun: null,
+        fillings: []
       }
     }
     default: {

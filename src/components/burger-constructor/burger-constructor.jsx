@@ -12,8 +12,6 @@ import { v4 as uuid } from 'uuid'
 import { ADD_INGREDIENT } from '../../services/actions/burger-constructor'
 import BurgerConstructorList from '../burger-constructor-list/burger-constructor-list'
 
-const URL_ORDERS = 'https://norma.nomoreparties.space/api/orders'
-
 const BurgerConstructor = function () {
   const { bun, fillings } = useSelector(state => state.burgerConstructor)
 
@@ -28,20 +26,7 @@ const BurgerConstructor = function () {
   }, [bun, fillings])
 
   const onClickOrder = () => {
-    const ingredientsId = [
-      bun._id,
-      ...fillings.map(element => element._id),
-      bun._id
-    ]
-    const requestBody = { ingredients: ingredientsId }
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify(requestBody)
-    }
-    dispatch(getOrder(URL_ORDERS, options))
+    dispatch(getOrder(bun, fillings))
   }
 
   const [{ isHover }, dropTargetRef] = useDrop({
@@ -67,42 +52,59 @@ const BurgerConstructor = function () {
     }
   })
 
+  const title = (
+    <p className="text text_type_main-medium m-10">
+      Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
+    </p>
+  )
+
+  const propButton = {
+    type: 'primary',
+    size: 'medium',
+    htmlType: 'button',
+    onClick: onClickOrder
+  }
+  propButton.disabled = !bun
+
   return (
-    <section className={style.section}>
-      <div ref={dropTargetRef} className={`${style.burger} pt-25 mb-10`}>
-        <div className="mb-4 pl-4 pr-4">
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={`${bun?.name ?? ''} (верх)`}
-            price={bun?.price ?? ''}
-            thumbnail={bun?.image_mobile ?? ''}
-          />
-        </div>
-        <BurgerConstructorList fillings={fillings} />
-        <div className="mt-4 pl-4 pr-4">
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={`${bun?.name ?? ''} (низ)`}
-            price={bun?.price ?? ''}
-            thumbnail={bun?.image_mobile ?? ''}
-          />
-        </div>
-      </div>
-      <div className={`${style.order} mr-4`}>
-        <div className="text_type_digits-medium mr-10">
-          {total} <CurrencyIcon type="primary" />
-        </div>
-        <Button
-          type="primary"
-          size="medium"
-          htmlType="button"
-          onClick={onClickOrder}
-        >
-          Оформить заказ
-        </Button>
-      </div>
+    <section ref={dropTargetRef} className={style.section}>
+      {!bun && !fillings.length ? (
+        title
+      ) : (
+        <>
+          <div className={`${style.burger} pt-25 mb-10`}>
+            <div className="mb-4 pl-4 pr-4">
+              {bun && (
+                <ConstructorElement
+                  type="top"
+                  isLocked={true}
+                  text={`${bun?.name ?? ''} (верх)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
+                />
+              )}
+            </div>
+            <BurgerConstructorList fillings={fillings} />
+            <div className="mt-4 pl-4 pr-4">
+              {bun && (
+                <ConstructorElement
+                  type="bottom"
+                  isLocked={true}
+                  text={`${bun?.name ?? ''} (низ)`}
+                  price={bun?.price ?? ''}
+                  thumbnail={bun?.image_mobile ?? ''}
+                />
+              )}
+            </div>
+          </div>
+          <div className={`${style.order} mr-4`}>
+            <div className="text_type_digits-medium mr-10">
+              {total} <CurrencyIcon type="primary" />
+            </div>
+            <Button {...propButton}>Оформить заказ</Button>
+          </div>
+        </>
+      )}
     </section>
   )
 }
