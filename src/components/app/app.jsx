@@ -1,46 +1,73 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import AppHeader from '../app-header/app-header'
 import style from './app.module.css'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import Modal from '../UI/modal/modal'
-import useModalControl from '../../hooks/use-modal-control.js'
-import { request } from '../../utils/request'
-import { IngredientsContext } from '../../services/app-context'
-
-const URL_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients'
+import { useSelector, useDispatch } from 'react-redux'
+import { getIngredients } from '../../services/actions/burger-ingredients'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import IngredientDetails from '../ingredient-details/ingredient-details'
+import OrderDetails from '../order-details/order-details'
+import {
+  CLEAR_MODAL_TYPE,
+  CLOSE_MODAL,
+  SET_MODAL_TYPE,
+  OPEN_MODAL
+} from '../../services/actions/actions'
+import { CLEAR_CURRENT_INGREDIENT } from '../../services/actions/ingredient-details'
+import { CLEAR_ORDER } from '../../services/actions/order-details'
 
 function App() {
-  const [ingredients, setIngredients] = useState([])
-  const [modalDetails, openModal, closeModal] = useModalControl()
+  const { contentType } = useSelector(state => state.switchModal)
+  const order = useSelector(state => state.orderDetails.order)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    request(URL_INGREDIENTS)
-      .then(result => setIngredients(result.data))
-      .catch(err => console.error(err))
+    dispatch(getIngredients())
   }, [])
+
+  useEffect(() => {
+    if (order) {
+      dispatch({ type: SET_MODAL_TYPE, payload: 'order' })
+      dispatch({ type: OPEN_MODAL })
+    }
+  }, [order])
+
+  let contentModal
+  let title
+  switch (contentType) {
+    case 'ingredient':
+      contentModal = <IngredientDetails />
+      title = 'Детали ингредиента'
+      break
+    case 'order':
+      contentModal = <OrderDetails />
+      break
+  }
+
+  const closeModal = () => {
+    dispatch({ type: CLOSE_MODAL })
+    dispatch({ type: CLEAR_MODAL_TYPE })
+    contentType === 'ingredient' && dispatch({ type: CLEAR_CURRENT_INGREDIENT })
+    contentType === 'order' && dispatch({ type: CLEAR_ORDER })
+  }
 
   return (
     <>
       <AppHeader />
       <main className={style.main}>
-          <BurgerIngredients
-            ingredients={ingredients}
-            openModal={openModal}
-          />
-          <IngredientsContext.Provider value={{ ingredients, setIngredients }}>
-            <BurgerConstructor
-              openModal={openModal}
-            />
-        </IngredientsContext.Provider>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
-      <Modal
-        closeModal={closeModal}
-        isOpen={modalDetails.isOpen}
-        title={modalDetails.title}
-      >{modalDetails.children}</Modal>
+      <Modal closeModal={closeModal} title={title}>
+        {contentModal}
+      </Modal>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

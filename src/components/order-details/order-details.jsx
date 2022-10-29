@@ -1,20 +1,23 @@
 import React from 'react'
 import style from './order-details.module.css'
 import image from '../../image/done.png'
-import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-export default function OrderDetails({ order }) {
-    return (
-        <div className={`${style.block} mt-30 mb-30 ml-25 mr-25`}>
-            <p className={`${style.number} text text_type_digits-large mb-8`}>{order}</p>
-            <p className='text text_type_main-medium mb-15'>идентификатор заказа</p>
-            <img src={image} alt="Готово" className={`${style.image} mb-15`} />
-            <p className='text text_type_main-default mb-2'>Ваш заказ начали готовить</p>
-            <p className='text text_type_main-default text_color_inactive'>Дождитесь готовности на орбитальной станции</p>
-        </div>
-    )
-}
-
-OrderDetails.propTypes = {
-    order: PropTypes.number.isRequired,
+export default function OrderDetails() {
+  const { order } = useSelector(state => state.orderDetails.order)
+  return (
+    <div className={`${style.block} mt-30 mb-30 ml-25 mr-25`}>
+      <p className={`${style.number} text text_type_digits-large mb-8`}>
+        {order.number}
+      </p>
+      <p className="text text_type_main-medium mb-15">идентификатор заказа</p>
+      <img src={image} alt="Готово" className={`${style.image} mb-15`} />
+      <p className="text text_type_main-default mb-2">
+        Ваш заказ начали готовить
+      </p>
+      <p className="text text_type_main-default text_color_inactive">
+        Дождитесь готовности на орбитальной станции
+      </p>
+    </div>
+  )
 }

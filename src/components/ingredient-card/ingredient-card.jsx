@@ -1,38 +1,60 @@
-import React from "react"
-import { CurrencyIcon, Counter } 
-   from '@ya.praktikum/react-developer-burger-ui-components'
+import React from 'react'
+import {
+  CurrencyIcon,
+  Counter
+} from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingredient-card.module.css'
-import PropTypes from 'prop-types'
-import { ingredientPropTypes } from '../../utils/prop-types.js'
-import IngredientDetails from "../ingredient-details/ingredient-details"
+import { useSelector, useDispatch } from 'react-redux'
+import { OPEN_MODAL, SET_MODAL_TYPE } from '../../services/actions/actions'
+import { SET_CURRENT_INGREDIENT } from '../../services/actions/ingredient-details'
+import { ingredientPropTypes } from '../../utils/prop-types'
+import { useDrag } from 'react-dnd'
 
-export default function IngredientCard({ count = 0, ingredient, openModal }) {
+export default function IngredientCard({ ingredient, count = 0 }) {
+  const dispatch = useDispatch()
 
-   const onClick = () => openModal(<IngredientDetails ingredient={ingredient} />, 'Детали ингредиента')
+  const onClick = () => {
+    dispatch({ type: SET_CURRENT_INGREDIENT, ingredient })
+    dispatch({ type: SET_MODAL_TYPE, payload: 'ingredient' })
+    dispatch({ type: OPEN_MODAL })
+  }
 
-   return (
-      <button type="button" className={style.card} onClick={onClick}>
-         <div className={`${style.image} ml-4 mr-4 mb-1`}>
-            <img src={ingredient.image} alt={ingredient.name} />
-         </div>
-         <div className={`${style.price} mb-1`}>
-            <span className="text text_type_digits-default">{ingredient.price} </span>
-            <CurrencyIcon />
-         </div>
-         <div className={style.description}>
-            <p className="text text_type_main-default">{ingredient.name}</p>
-         </div>
-         {count !== 0 && (
-            <div className={style.counter}>
-               <Counter count={count} size={count >= 10 ? "small" : 'default'} />
-            </div>
-         )}
-      </button>
-   )
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'ingredient',
+    item: { ...ingredient },
+    collect: monitor => ({
+      opacity: monitor.isDragging() ? 0.5 : 1
+    })
+  })
+
+  return (
+    <button
+      ref={dragRef}
+      type="button"
+      className={style.card}
+      onClick={onClick}
+    >
+      <div className={`${style.image} ml-4 mr-4 mb-1`}>
+        <img src={ingredient.image} alt={ingredient.name} />
+      </div>
+      <div className={`${style.price} mb-1`}>
+        <span className="text text_type_digits-default">
+          {ingredient.price}{' '}
+        </span>
+        <CurrencyIcon />
+      </div>
+      <div className={style.description}>
+        <p className="text text_type_main-default">{ingredient.name}</p>
+      </div>
+      {count !== 0 && (
+        <div className={style.counter}>
+          <Counter count={count} size={count >= 10 ? 'small' : 'default'} />
+        </div>
+      )}
+    </button>
+  )
 }
 
 IngredientCard.propTypes = {
-   count: PropTypes.number,
-   ingredient: ingredientPropTypes().isRequired,
-   openModal: PropTypes.func.isRequired,
+  ingredient: ingredientPropTypes().isRequired
 }
