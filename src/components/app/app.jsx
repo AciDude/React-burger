@@ -65,14 +65,42 @@ function App() {
               path="/ingredients/:ingredientId"
               element={<IngredientDetails title="Детали ингредиента" />}
             ></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-            <Route path="/forgot-password" element={<ForgotPassword />}></Route>
-            <Route path="/reset-password" element={<ResetPassword />}></Route>
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoutes onlyAuth={false}>
+                  <Login />
+                </ProtectedRoutes>
+              }
+            ></Route>
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoutes onlyAuth={false}>
+                  <Register />
+                </ProtectedRoutes>
+              }
+            ></Route>
+            <Route
+              path="/forgot-password"
+              element={
+                <ProtectedRoutes onlyAuth={false}>
+                  <ForgotPassword />
+                </ProtectedRoutes>
+              }
+            ></Route>
+            <Route
+              path="/reset-password"
+              element={
+                <ProtectedRoutes onlyAuth={false}>
+                  <ResetPassword />
+                </ProtectedRoutes>
+              }
+            ></Route>
             <Route
               path="/profile/*"
               element={
-                <ProtectedRoutes>
+                <ProtectedRoutes onlyAuth={true}>
                   <Profile />
                 </ProtectedRoutes>
               }
@@ -92,21 +120,20 @@ function App() {
             />
           </Routes>
         )}
-        {background &&
-          order(
-            <Routes>
-              <Route
-                path="/modal-order"
-                element={
-                  <ProtectedRoutes>
-                    <Modal closeModal={closeModal}>
-                      <OrderDetails />
-                    </Modal>
-                  </ProtectedRoutes>
-                }
-              />
-            </Routes>
-          )}
+        {background && order && (
+          <Routes>
+            <Route
+              path="/modal-order"
+              element={
+                <ProtectedRoutes onlyAuth={true}>
+                  <Modal closeModal={closeModal}>
+                    <OrderDetails />
+                  </Modal>
+                </ProtectedRoutes>
+              }
+            />
+          </Routes>
+        )}
       </>
     )
   }

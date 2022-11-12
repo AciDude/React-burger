@@ -4,14 +4,11 @@ import {
   Input
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './forgot-password.module.css'
-import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../../utils/base-url'
 import { request } from '../../../utils/request'
-import { useSelector } from 'react-redux'
 
 export default function ForgotPassword() {
-  const user = useSelector(state => state.auth.user)
-
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -40,8 +37,6 @@ export default function ForgotPassword() {
       })
     )
   }
-
-  if (user) return <Navigate to={location.state || '/'} replace />
 
   return (
     <div className={style.container}>

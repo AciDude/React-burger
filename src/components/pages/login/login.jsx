@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
-import { Link, useLocation, Navigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   EmailInput,
   PasswordInput,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './login.module.css'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { authUser } from '../../../services/actions/auth'
 
 export default function Login() {
-  const user = useSelector(state => state.auth.user)
-
   const location = useLocation()
   const dispatch = useDispatch()
 
@@ -28,8 +26,6 @@ export default function Login() {
     e.preventDefault()
     dispatch(authUser('login', value))
   }
-
-  if (user) return <Navigate to={location.state?.pathname || '/'} replace />
 
   return (
     <div className={style.container}>

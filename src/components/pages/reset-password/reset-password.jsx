@@ -7,11 +7,8 @@ import style from './reset-password.module.css'
 import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
 import { BASE_URL } from '../../../utils/base-url'
 import { request } from '../../../utils/request'
-import { useSelector } from 'react-redux'
 
 export default function ResetPassword() {
-  const user = useSelector(state => state.auth.user)
-
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -56,8 +53,6 @@ export default function ResetPassword() {
       })
     )
   }
-
-  if (user) return <Navigate to={location.state || '/'} replace />
 
   if (
     location.state?.prevPathname !== '/forgot-password' &&

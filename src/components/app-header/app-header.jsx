@@ -32,7 +32,8 @@ const AppHeader = React.memo(function () {
     'text',
     'text_type_main-default',
     'text_color_inactive',
-    style.button
+    style.button,
+    style.inactive
   ]
   const classes = classesArray.join(' ')
 

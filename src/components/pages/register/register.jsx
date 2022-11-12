@@ -6,13 +6,11 @@ import {
   Input
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './register.module.css'
-import { Link, useLocation, Navigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { authUser } from '../../../services/actions/auth'
 
 export default function Register() {
-  const user = useSelector(state => state.auth.user)
-
   const dispatch = useDispatch()
   const location = useLocation()
 
@@ -30,8 +28,6 @@ export default function Register() {
     e.preventDefault()
     dispatch(authUser('register', value))
   }
-
-  if (user) return <Navigate to={location.state || '/'} replace />
 
   return (
     <div className={style.container}>
