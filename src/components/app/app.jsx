@@ -10,63 +10,110 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import IngredientDetails from '../ingredient-details/ingredient-details'
 import OrderDetails from '../order-details/order-details'
-import {
-  CLEAR_MODAL_TYPE,
-  CLOSE_MODAL,
-  SET_MODAL_TYPE,
-  OPEN_MODAL
-} from '../../services/actions/actions'
-import { CLEAR_CURRENT_INGREDIENT } from '../../services/actions/ingredient-details'
 import { CLEAR_ORDER } from '../../services/actions/order-details'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate
+} from 'react-router-dom'
+import Login from '../pages/login/login'
+import Register from '../pages/register/register'
+import ForgotPassword from '../pages/forgot-password/forgot-password'
+import ResetPassword from '../pages/reset-password/reset-password'
+import Profile from '../pages/profile/profile'
+import ProtectedRoutes from '../../hocs/protected-routes'
+import NotFound404 from '../pages/not-found-404/not-found-404'
+import { getUser } from '../../services/actions/auth'
+import { getCookie } from '../../utils/auth'
 
 function App() {
-  const { contentType } = useSelector(state => state.switchModal)
-  const order = useSelector(state => state.orderDetails.order)
-  const dispatch = useDispatch()
+  const ModalSwitch = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    let background = location.state?.background
 
-  useEffect(() => {
-    dispatch(getIngredients())
-  }, [])
+    const order = useSelector(state => state.orderDetails.order)
+    const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (order) {
-      dispatch({ type: SET_MODAL_TYPE, payload: 'order' })
-      dispatch({ type: OPEN_MODAL })
+    useEffect(() => {
+      dispatch(getIngredients())
+      const cookie = getCookie('accessToken')
+      cookie && dispatch(getUser())
+    }, [dispatch])
+
+    const closeModal = () => {
+      order && dispatch({ type: CLEAR_ORDER })
+      navigate(-1)
     }
-  }, [order])
 
-  let contentModal
-  let title
-  switch (contentType) {
-    case 'ingredient':
-      contentModal = <IngredientDetails />
-      title = 'Детали ингредиента'
-      break
-    case 'order':
-      contentModal = <OrderDetails />
-      break
+    const mainPage = (
+      <DndProvider backend={HTML5Backend}>
+        <BurgerIngredients />
+        <BurgerConstructor />
+      </DndProvider>
+    )
+
+    return (
+      <>
+        <AppHeader />
+        <main className={style.main}>
+          <Routes location={background || location}>
+            <Route index element={mainPage}></Route>
+            <Route
+              path="/ingredients/:ingredientId"
+              element={<IngredientDetails title="Детали ингредиента" />}
+            ></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+            <Route path="/reset-password" element={<ResetPassword />}></Route>
+            <Route
+              path="/profile/*"
+              element={
+                <ProtectedRoutes>
+                  <Profile />
+                </ProtectedRoutes>
+              }
+            ></Route>
+            <Route path="*" element={<NotFound404 />}></Route>
+          </Routes>
+        </main>
+        {background && (
+          <Routes>
+            <Route
+              path="/ingredients/:ingredientId"
+              element={
+                <Modal closeModal={closeModal} title="Детали ингредиента">
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
+        {background &&
+          order(
+            <Routes>
+              <Route
+                path="/modal-order"
+                element={
+                  <ProtectedRoutes>
+                    <Modal closeModal={closeModal}>
+                      <OrderDetails />
+                    </Modal>
+                  </ProtectedRoutes>
+                }
+              />
+            </Routes>
+          )}
+      </>
+    )
   }
-
-  const closeModal = () => {
-    dispatch({ type: CLOSE_MODAL })
-    dispatch({ type: CLEAR_MODAL_TYPE })
-    contentType === 'ingredient' && dispatch({ type: CLEAR_CURRENT_INGREDIENT })
-    contentType === 'order' && dispatch({ type: CLEAR_ORDER })
-  }
-
   return (
-    <>
-      <AppHeader />
-      <main className={style.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
-      <Modal closeModal={closeModal} title={title}>
-        {contentModal}
-      </Modal>
-    </>
+    <Router>
+      <ModalSwitch />
+    </Router>
   )
 }
 

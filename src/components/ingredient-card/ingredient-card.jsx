@@ -4,19 +4,21 @@ import {
   Counter
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingredient-card.module.css'
-import { useSelector, useDispatch } from 'react-redux'
-import { OPEN_MODAL, SET_MODAL_TYPE } from '../../services/actions/actions'
-import { SET_CURRENT_INGREDIENT } from '../../services/actions/ingredient-details'
 import { ingredientPropTypes } from '../../utils/prop-types'
 import { useDrag } from 'react-dnd'
+import { useLocation, useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 export default function IngredientCard({ ingredient, count = 0 }) {
-  const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const ingredientId = ingredient._id
 
   const onClick = () => {
-    dispatch({ type: SET_CURRENT_INGREDIENT, ingredient })
-    dispatch({ type: SET_MODAL_TYPE, payload: 'ingredient' })
-    dispatch({ type: OPEN_MODAL })
+    navigate(`/ingredients/${ingredientId}`, {
+      state: { background: location }
+    })
   }
 
   const [{ opacity }, dragRef] = useDrag({
@@ -29,10 +31,12 @@ export default function IngredientCard({ ingredient, count = 0 }) {
 
   return (
     <button
+      key={ingredientId}
       ref={dragRef}
       type="button"
       className={style.card}
       onClick={onClick}
+      style={{ opacity }}
     >
       <div className={`${style.image} ml-4 mr-4 mb-1`}>
         <img src={ingredient.image} alt={ingredient.name} />
@@ -56,5 +60,6 @@ export default function IngredientCard({ ingredient, count = 0 }) {
 }
 
 IngredientCard.propTypes = {
-  ingredient: ingredientPropTypes().isRequired
+  ingredient: ingredientPropTypes().isRequired,
+  count: PropTypes.number
 }

@@ -3,7 +3,6 @@ import IngredientCard from '../ingredient-card/ingredient-card'
 import style from './ingredients-section.module.css'
 import PropTypes from 'prop-types'
 import { ingredientPropTypes } from '../../utils/prop-types.js'
-import { useSelector } from 'react-redux'
 
 const IngredientsSection = React.forwardRef(
   ({ title, ingredients, count = {}, type }, ref) => {

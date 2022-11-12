@@ -2,7 +2,6 @@
    display: flex;
    flex-flow: column;
    align-items: center;
-   justify-content: center;
    width: 520px;
    text-align: center;
 }

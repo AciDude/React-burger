@@ -11,11 +11,16 @@ import { useDrop } from 'react-dnd'
 import { v4 as uuid } from 'uuid'
 import { ADD_INGREDIENT } from '../../services/actions/burger-constructor'
 import BurgerConstructorList from '../burger-constructor-list/burger-constructor-list'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
 
 const BurgerConstructor = function () {
   const { bun, fillings } = useSelector(state => state.burgerConstructor)
+  const { user } = useSelector(state => state.auth)
 
   const dispatch = useDispatch()
+
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const total = useMemo(() => {
     const bunPrice = bun?.price ?? 0
@@ -27,9 +32,12 @@ const BurgerConstructor = function () {
 
   const onClickOrder = () => {
     dispatch(getOrder(bun, fillings))
+    navigate('/modal-order', {
+      state: { background: location }
+    })
   }
 
-  const [{ isHover }, dropTargetRef] = useDrop({
+  const [, dropTargetRef] = useDrop({
     accept: 'ingredient',
     collect: monitor => ({
       isHover: monitor.isOver()
@@ -57,14 +65,6 @@ const BurgerConstructor = function () {
       Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
     </p>
   )
-
-  const propButton = {
-    type: 'primary',
-    size: 'medium',
-    htmlType: 'button',
-    onClick: onClickOrder
-  }
-  propButton.disabled = !bun
 
   return (
     <section ref={dropTargetRef} className={style.section}>
@@ -97,12 +97,33 @@ const BurgerConstructor = function () {
               )}
             </div>
           </div>
-          <div className={`${style.order} mr-4`}>
-            <div className="text_type_digits-medium mr-10">
-              {total} <CurrencyIcon type="primary" />
+          {user ? (
+            <div className={`${style.order} mr-4`}>
+              <div className="text_type_digits-medium mr-10">
+                {total} <CurrencyIcon type="primary" />
+              </div>
+              <Button
+                type="primary"
+                size="medium"
+                htmlType="button"
+                onClick={onClickOrder}
+                disabled={!bun}
+              >
+                Оформить заказ
+              </Button>
             </div>
-            <Button {...propButton}>Оформить заказ</Button>
-          </div>
+          ) : (
+            <div className="text text_type_main-default">
+              <Link
+                to="/login"
+                state={{ pathname: location.pathname }}
+                className="text_type_main-medium text_color_inactive"
+              >
+                Авторизуйтесь
+              </Link>{' '}
+              <span>для оформления заказа</span>
+            </div>
+          )}
         </>
       )}
     </section>
