@@ -1,11 +1,20 @@
 import React from 'react'
 import style from './ingredient-details.module.css'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-export default function IngredientDetails() {
-  const { ingredient } = useSelector(state => state.currentIngredient)
+export default function IngredientDetails({ title = '' }) {
+  const { ingredientId } = useParams()
+  const ingredient = useSelector(state =>
+    state.burgerIngredients.ingredients.find(
+      ingredient => ingredient._id === ingredientId
+    )
+  )
+  if (!ingredient) return null
   return (
     <div className={`${style.block} ml-10 mr-10 mb-15`}>
+      <p className="text text_type_main-large mt-30">{title}</p>
       <div className={`${style.image} mb-4`}>
         <img src={ingredient.image_large} alt={ingredient.name} />
       </div>
@@ -36,4 +45,8 @@ export default function IngredientDetails() {
       </ul>
     </div>
   )
+}
+
+IngredientDetails.propTypes = {
+  title: PropTypes.string
 }

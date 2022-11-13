@@ -5,6 +5,7 @@ import {
   ConstructorElement,
   DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components'
+import PropTypes from 'prop-types'
 
 export default function BurgerConstructorElement({
   ingredient,
@@ -65,6 +66,7 @@ export default function BurgerConstructorElement({
       ref={ref}
       className={`${style.ingredient} pl-4`}
       key={ingredient.dragId}
+      style={{ opacity }}
     >
       <DragIcon type="primary" />
       <ConstructorElement
@@ -76,4 +78,11 @@ export default function BurgerConstructorElement({
       />
     </li>
   )
+}
+
+BurgerConstructorElement.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  onClickIngredient: PropTypes.func.isRequired,
+  moveCard: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired
 }

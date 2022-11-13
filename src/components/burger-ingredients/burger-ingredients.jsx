@@ -94,8 +94,9 @@ const BurgerIngredients = function () {
     return obj
   }, [bun, fillings])
 
-  const onClickTab = useCallback(element =>
-    element.scrollIntoView({ behavior: 'smooth' })
+  const onClickTab = useCallback(
+    element => element.scrollIntoView({ behavior: 'smooth' }),
+    []
   )
 
   return (

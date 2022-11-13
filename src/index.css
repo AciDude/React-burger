@@ -6,6 +6,12 @@
 ul {
   list-style-type: none;
 }
-a {
+a, a:active, a:hover, a:visited {
   text-decoration: none;
+  color: none;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }

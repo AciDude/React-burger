@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  width: 100%;
+  margin-top: 120px;
+  gap: 60px;
+}
+.menu {
+  flex: 0 0 320px;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  flex: 1 0 max-content;
+}
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.link, .button {
+  width: 100%;
+  height: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+.description {
+  opacity: 40%;
+}
+.inactive {
+  transition: filter 300ms ease;
+}
+
+.inactive:hover {
+  filter: saturate(200%);
+}
+
+.active {
+  color: #F2F2F3;
+  cursor: default;
+}

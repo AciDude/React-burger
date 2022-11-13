@@ -9,8 +9,17 @@
    flex-flow: column;
    align-items: flex-end;
    width: 100%;
+   position: relative;
 }
 .order {
    display: flex;
    align-items: center;
+}
+.preloader {
+   position: absolute !important;
+   top: calc(50% );
+   left: calc(50% - 30px);;
+}
+.hidden {
+   display: none !important;
 }

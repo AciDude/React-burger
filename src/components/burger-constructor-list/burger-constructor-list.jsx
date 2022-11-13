@@ -6,6 +6,7 @@ import {
 import { useDispatch } from 'react-redux'
 import BurgerConstructorElement from '../burger-constructor-element/burger-constructor-element'
 import style from './burger-constructor-list.module.css'
+import PropTypes from 'prop-types'
 
 export default function BurgerConstructorList({ fillings }) {
   const dispatch = useDispatch()
@@ -43,4 +44,8 @@ export default function BurgerConstructorList({ fillings }) {
       ))}
     </ul>
   )
+}
+
+BurgerConstructorList.propTypes = {
+  fillings: PropTypes.array.isRequired
 }
