@@ -12,10 +12,12 @@ import { v4 as uuid } from 'uuid'
 import { ADD_INGREDIENT } from '../../services/actions/burger-constructor'
 import BurgerConstructorList from '../burger-constructor-list/burger-constructor-list'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
+import ClipLoader from 'react-spinners/MoonLoader'
 
 const BurgerConstructor = function () {
   const { bun, fillings } = useSelector(state => state.burgerConstructor)
-  const { user } = useSelector(state => state.auth)
+  const { user, userRequest } = useSelector(state => state.auth)
+  const { orderRequest } = useSelector(state => state.orderDetails)
 
   const dispatch = useDispatch()
 
@@ -73,6 +75,11 @@ const BurgerConstructor = function () {
       ) : (
         <>
           <div className={`${style.burger} pt-25 mb-10`}>
+            <ClipLoader
+              color="#a832a4"
+              className={orderRequest ? style.preloader : style.hidden}
+              size={80}
+            />
             <div className="mb-4 pl-4 pr-4">
               {bun && (
                 <ConstructorElement
@@ -107,7 +114,7 @@ const BurgerConstructor = function () {
                 size="medium"
                 htmlType="button"
                 onClick={onClickOrder}
-                disabled={!bun}
+                disabled={!bun || userRequest}
               >
                 Оформить заказ
               </Button>

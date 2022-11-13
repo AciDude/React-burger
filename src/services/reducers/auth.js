@@ -11,7 +11,7 @@ const initialState = {
   user: null,
   userRequest: false,
   userFailed: false,
-  error: ''
+  error: null
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -20,7 +20,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userRequest: true,
-        error: ''
+        error: null
       }
     }
     case GET_USER_SUCCESS: {
@@ -29,7 +29,7 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload,
         userRequest: false,
         userFailed: false,
-        error: ''
+        error: null
       }
     }
     case GET_USER_FAILED: {
@@ -45,7 +45,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userRequest: true,
-        error: ''
+        error: null
       }
     }
     case CLEAR_USER_SUCCESS: {
@@ -54,7 +54,7 @@ export const userReducer = (state = initialState, action) => {
         user: null,
         userRequest: false,
         userFailed: false,
-        error: ''
+        error: null
       }
     }
     case CLEAR_USER_FAILED: {

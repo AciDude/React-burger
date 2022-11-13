@@ -63,6 +63,7 @@ export const getUser =
         if (err.message === 'jwt expired') {
           dispatch(refreshToken(getUser(body, method)))
         } else {
+          console.log(1)
           dispatch({
             type: GET_USER_FAILED,
             payload: err.message
@@ -101,7 +102,7 @@ export const logoutUser = () => dispatch => {
 }
 
 export const refreshToken = afterRefresh => dispatch => {
-  request(`${BASE_URL}/auth/token`, {
+  request(`${BASE_URL}auth/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8'

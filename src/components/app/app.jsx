@@ -118,17 +118,15 @@ function App() {
                 </Modal>
               }
             />
-          </Routes>
-        )}
-        {background && order && (
-          <Routes>
             <Route
               path="/modal-order"
               element={
                 <ProtectedRoutes onlyAuth={true}>
-                  <Modal closeModal={closeModal}>
-                    <OrderDetails />
-                  </Modal>
+                  {order && (
+                    <Modal closeModal={closeModal}>
+                      <OrderDetails />
+                    </Modal>
+                  )}
                 </ProtectedRoutes>
               }
             />

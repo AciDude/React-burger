@@ -3,11 +3,9 @@ import { Navigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-export default function ProtectedRoutes({ children, onlyAuth }) {
+export default function ProtectedRoutes({ children = null, onlyAuth }) {
   const location = useLocation()
-  const { user, userRequest } = useSelector(state => state.auth)
-
-  if (userRequest) return null
+  const { user } = useSelector(state => state.auth)
 
   if (onlyAuth) {
     return !user ? (
@@ -25,6 +23,6 @@ export default function ProtectedRoutes({ children, onlyAuth }) {
 }
 
 ProtectedRoutes.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]).isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.element]),
   onlyAuth: PropTypes.bool.isRequired
 }
