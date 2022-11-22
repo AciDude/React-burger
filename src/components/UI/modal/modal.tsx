@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, FC, PropsWithChildren, ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './modal.module.css'
@@ -6,9 +6,19 @@ import ModalOverlay from '../modal-overlay/modal-overlay'
 
 const modalRoot = document.getElementById('modal')
 
-export default function Modal({ children, title, closeModal }) {
+type Props = {
+  title?: string
+  closeModal(): void
+  children: ReactNode
+}
+
+const Modal: FC<PropsWithChildren<Props>> = ({
+  children,
+  title,
+  closeModal
+}) => {
   useEffect(() => {
-    const pressKey = e => e.key === 'Escape' && closeModal()
+    const pressKey = (e: KeyboardEvent) => e.key === 'Escape' && closeModal()
     const body = document.body
     body.addEventListener('keydown', pressKey)
     return () => {
@@ -33,6 +43,8 @@ export default function Modal({ children, title, closeModal }) {
       </div>
       <ModalOverlay closeModal={closeModal} />
     </div>,
-    modalRoot
+    modalRoot as Element
   )
 }
+
+export default Modal

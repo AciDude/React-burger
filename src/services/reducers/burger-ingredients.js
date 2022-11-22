@@ -9,8 +9,7 @@ import {
 const initialState = {
   ingredients: [],
   ingredientsRequest: false,
-  ingredientsFailed: false,
-  ingredientsError: ''
+  ingredientsFailed: false
 }
 
 export const burgerIngredientsReducer = (state = initialState, action) => {
@@ -26,22 +25,20 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
         ...state,
         ingredients: action.ingredients,
         ingredientsRequest: false,
-        ingredientsFailed: false,
-        ingredientsError: ''
+        ingredientsFailed: false
       }
     }
     case GET_INGREDIENTS_FAILED: {
       return {
         ...state,
         ingredientsRequest: false,
-        ingredientsFailed: true,
-        ingredientsError: action.error
+        ingredientsFailed: true
       }
     }
     case INCREASE_INGREDIENT: {
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) => {
+        ingredients: state.ingredients.map(ingredient => {
           return ingredient._id === action.id
             ? {
                 ...ingredient,
@@ -54,7 +51,7 @@ export const burgerIngredientsReducer = (state = initialState, action) => {
     case DECREASE_INGREDIENT: {
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) => {
+        ingredients: state.ingredients.map(ingredient => {
           return ingredient._id === action.id
             ? {
                 ...ingredient,

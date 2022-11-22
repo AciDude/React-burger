@@ -2,9 +2,10 @@ import React from 'react'
 import style from './order-details.module.css'
 import image from '../../image/done.png'
 import { useSelector } from 'react-redux'
+import { selectOrder } from '../../services/selectors'
 
 export default function OrderDetails() {
-  const order = useSelector(state => state.orderDetails.order)
+  const order = useSelector(selectOrder)
   return (
     order && (
       <div className={`${style.block} mt-30 mb-30 ml-25 mr-25`}>

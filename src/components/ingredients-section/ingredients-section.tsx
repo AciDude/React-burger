@@ -1,10 +1,18 @@
 import React from 'react'
 import IngredientCard from '../ingredient-card/ingredient-card'
 import style from './ingredients-section.module.css'
-import PropTypes from 'prop-types'
-import { ingredientPropTypes } from '../../utils/prop-types.js'
+import { TIngredients } from '../../utils/types'
 
-const IngredientsSection = React.forwardRef(
+type TProps = {
+  readonly title: string
+  readonly ingredients: TIngredients
+  readonly type: string
+  readonly count: {
+    [name: string]: number
+  }
+}
+
+const IngredientsSection = React.forwardRef<HTMLDivElement, TProps>(
   ({ title, ingredients, count = {}, type }, ref) => {
     return (
       <div ref={ref} data-type={type} className="mb-10 mt-10 ml-4 mr-4">
@@ -23,8 +31,3 @@ const IngredientsSection = React.forwardRef(
   }
 )
 export default IngredientsSection
-
-IngredientsSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  ingredients: PropTypes.arrayOf(ingredientPropTypes()).isRequired
-}

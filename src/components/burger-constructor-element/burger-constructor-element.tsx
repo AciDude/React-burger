@@ -5,16 +5,23 @@ import {
   ConstructorElement,
   DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import PropTypes from 'prop-types'
+import { TIngredientMain, TIngredientSauce } from '../../utils/types'
+
+type TProps = {
+  ingredient: Readonly<TIngredientMain | TIngredientSauce>
+  index: number
+  onClickIngredient(id: string): void
+  moveCard(dragIndex: number, hoverIndex: number): void
+}
 
 export default function BurgerConstructorElement({
   ingredient,
   onClickIngredient,
   moveCard,
   index
-}) {
+}: TProps) {
   const id = ingredient.dragId
-  const ref = useRef(null)
+  const ref = useRef<HTMLLIElement>(null)
   const [{ handlerId }, drop] = useDrop({
     accept: 'component',
     collect(monitor) {
@@ -26,7 +33,7 @@ export default function BurgerConstructorElement({
       if (!ref.current) {
         return
       }
-      const dragIndex = item.index
+      const dragIndex = (item as { id: string; index: number }).index
       const hoverIndex = index
       if (dragIndex === hoverIndex) {
         return
@@ -35,17 +42,27 @@ export default function BurgerConstructorElement({
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      const hoverClientY =
+        clientOffset && clientOffset.y - hoverBoundingRect.top
+      if (
+        hoverClientY &&
+        dragIndex < hoverIndex &&
+        hoverClientY < hoverMiddleY
+      ) {
         return
       }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      if (
+        hoverClientY &&
+        dragIndex > hoverIndex &&
+        hoverClientY > hoverMiddleY
+      ) {
         return
       }
       moveCard(dragIndex, hoverIndex)
-      item.index = hoverIndex
+      ;(item as { id: string; index: number }).index = hoverIndex
     }
   })
+  console.log(handlerId)
 
   const [{ isDragging }, drag] = useDrag({
     type: 'component',
@@ -59,7 +76,6 @@ export default function BurgerConstructorElement({
 
   drag(drop(ref))
 
-  const preventDefault = e => e.preventDefault()
   return (
     <li
       data-handler-id={handlerId}
@@ -74,15 +90,7 @@ export default function BurgerConstructorElement({
         price={ingredient.price}
         thumbnail={ingredient.image_mobile}
         handleClose={() => onClickIngredient(ingredient.dragId)}
-        onDrop={preventDefault}
       />
     </li>
   )
-}
-
-BurgerConstructorElement.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-  onClickIngredient: PropTypes.func.isRequired,
-  moveCard: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired
 }

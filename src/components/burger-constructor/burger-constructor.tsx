@@ -12,12 +12,26 @@ import { v4 as uuid } from 'uuid'
 import { ADD_INGREDIENT } from '../../services/actions/burger-constructor'
 import BurgerConstructorList from '../burger-constructor-list/burger-constructor-list'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
-import ClipLoader from 'react-spinners/MoonLoader'
+import MoonLoader from 'react-spinners/MoonLoader'
+import {
+  TIngredient,
+  TIngredientMain,
+  TIngredientSauce
+} from '../../utils/types'
+import {
+  selectConstructorBun,
+  selectConstructorFillings,
+  selectUser,
+  selectLogoutRequest,
+  selectOrderRequest
+} from '../../services/selectors'
 
 const BurgerConstructor = function () {
-  const { bun, fillings } = useSelector(state => state.burgerConstructor)
-  const { user, userRequest } = useSelector(state => state.auth)
-  const { orderRequest } = useSelector(state => state.orderDetails)
+  const fillings = useSelector(selectConstructorFillings)
+  const bun = useSelector(selectConstructorBun)
+  const user = useSelector(selectUser)
+  const logoutRequest = useSelector(selectLogoutRequest)
+  const orderRequest = useSelector(selectOrderRequest)
 
   const dispatch = useDispatch()
 
@@ -28,18 +42,28 @@ const BurgerConstructor = function () {
     const bunPrice = bun?.price ?? 0
     return (
       bunPrice * 2 +
-      fillings.reduce((sum, ingredient) => ingredient.price + sum, 0)
+      fillings.reduce<number>(
+        (
+          sum: number,
+          ingredient: Readonly<TIngredientMain | TIngredientSauce>
+        ): number => ingredient.price + sum,
+        0
+      )
     )
   }, [bun, fillings])
 
   const onClickOrder = () => {
-    dispatch(getOrder(bun, fillings))
+    dispatch<any>(getOrder(bun, fillings))
     navigate('/modal-order', {
       state: { background: location }
     })
   }
 
-  const [, dropTargetRef] = useDrop({
+  const [, dropTargetRef] = useDrop<
+    Readonly<TIngredient>,
+    unknown,
+    { isHover: boolean }
+  >({
     accept: 'ingredient',
     collect: monitor => ({
       isHover: monitor.isOver()
@@ -75,7 +99,7 @@ const BurgerConstructor = function () {
       ) : (
         <>
           <div className={`${style.burger} pt-25 mb-10`}>
-            <ClipLoader
+            <MoonLoader
               color="#a832a4"
               className={orderRequest ? style.preloader : style.hidden}
               size={80}
@@ -114,7 +138,7 @@ const BurgerConstructor = function () {
                 size="medium"
                 htmlType="button"
                 onClick={onClickOrder}
-                disabled={!bun || userRequest}
+                disabled={!bun || orderRequest || logoutRequest}
               >
                 Оформить заказ
               </Button>

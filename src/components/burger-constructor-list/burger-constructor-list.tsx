@@ -6,12 +6,16 @@ import {
 import { useDispatch } from 'react-redux'
 import BurgerConstructorElement from '../burger-constructor-element/burger-constructor-element'
 import style from './burger-constructor-list.module.css'
-import PropTypes from 'prop-types'
+import { TIngredientMain, TIngredientSauce } from '../../utils/types'
 
-export default function BurgerConstructorList({ fillings }) {
+type TProps = {
+  fillings: ReadonlyArray<TIngredientMain | TIngredientSauce | never>
+}
+
+export default function BurgerConstructorList({ fillings }: TProps) {
   const dispatch = useDispatch()
   const moveCard = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number): void => {
       const dragCard = fillings[dragIndex]
       const newCards = [...fillings]
       newCards.splice(dragIndex, 1)
@@ -25,7 +29,7 @@ export default function BurgerConstructorList({ fillings }) {
     [fillings, dispatch]
   )
   const onClickIngredient = useCallback(
-    id => {
+    (id: string): void => {
       dispatch({ type: DELETE_INGREDIENT, id })
     },
     [dispatch]
@@ -44,8 +48,4 @@ export default function BurgerConstructorList({ fillings }) {
       ))}
     </ul>
   )
-}
-
-BurgerConstructorList.propTypes = {
-  fillings: PropTypes.array.isRequired
 }

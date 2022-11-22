@@ -6,10 +6,13 @@ import {
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUser } from '../../../services/actions/auth'
+import { patchUser } from '../../../services/actions/auth'
+import { selectUser } from '../../../services/selectors'
+
+type TInputs = 'name' | 'email' | 'password'
 
 export default function Person() {
-  const user = useSelector(state => state.auth.user)
+  const user = useSelector(selectUser)
   const dispatch = useDispatch()
 
   const [inputsState, setInputsState] = useState({
@@ -18,8 +21,8 @@ export default function Person() {
     password: { value: '', isFocused: false, isChanged: false }
   })
 
-  const nameRef = useRef()
-  const emailRef = useRef()
+  const nameRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (user)
@@ -29,57 +32,73 @@ export default function Person() {
         email: { ...inputsState.email, value: user.email, isChanged: false },
         password: { ...inputsState.password, value: '', isChanged: false }
       })
-  }, [user])
+  }, [user, inputsState])
 
-  const onIconClick = element => {
-    setInputsState({
-      ...inputsState,
-      [element.name]: { ...inputsState[element.name], isFocused: true }
-    })
-    setTimeout(() => element.focus(), 0)
+  const onIconClick = (element: HTMLInputElement | null) => {
+    if (element) {
+      setInputsState({
+        ...inputsState,
+        [element.name]: {
+          ...inputsState[element.name as TInputs],
+          isFocused: true
+        }
+      })
+      setTimeout(() => element.focus(), 0)
+    }
   }
 
   const isChange = Object.values(inputsState).some(item => item.isChanged)
 
-  const onBlur = e =>
-    setInputsState({
-      ...inputsState,
-      [e.target.name]: { ...inputsState[e.target.name], isFocused: false }
-    })
-
-  const onChange = e => {
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) =>
     setInputsState({
       ...inputsState,
       [e.target.name]: {
-        ...inputsState[e.target.name],
-        value: e.target.value,
-        isChanged:
-          e.target.name === 'password'
-            ? e.target.value !== ''
-            : e.target.value !== user[e.target.name]
+        ...inputsState[e.target.name as TInputs],
+        isFocused: false
       }
     })
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (user) {
+      setInputsState({
+        ...inputsState,
+        [e.target.name]: {
+          ...inputsState[e.target.name as TInputs],
+          value: e.target.value,
+          isChanged:
+            e.target.name === 'password'
+              ? e.target.value !== ''
+              : e.target.value !== user[e.target.name as 'name' | 'email']
+        }
+      })
+    }
   }
 
-  const onClickCancel = () =>
-    setInputsState({
-      ...inputsState,
-      name: { ...inputsState.name, value: user.name, isChanged: false },
-      email: { ...inputsState.email, value: user.email, isChanged: false },
-      password: { ...inputsState.password, value: '', isChanged: false }
-    })
+  const onClickCancel = () => {
+    if (user) {
+      setInputsState({
+        ...inputsState,
+        name: { ...inputsState.name, value: user.name, isChanged: false },
+        email: { ...inputsState.email, value: user.email, isChanged: false },
+        password: { ...inputsState.password, value: '', isChanged: false }
+      })
+    }
+  }
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const body = Object.entries(inputsState).reduce((acc, item) => {
-      if (item[1].isChanged) {
-        const key = item[0]
-        const value = item[1].value
-        acc[key] = value
-      }
-      return acc
-    }, {})
-    dispatch(getUser(body, 'PATCH'))
+    const body = Object.entries(inputsState).reduce(
+      (acc: { [name: string]: string }, item) => {
+        if (item[1].isChanged) {
+          const key = item[0]
+          const value = item[1].value
+          acc[key] = value
+        }
+        return acc
+      },
+      {}
+    )
+    dispatch<any>(patchUser(body))
   }
 
   return (

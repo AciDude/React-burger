@@ -4,12 +4,18 @@ import {
   Counter
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingredient-card.module.css'
-import { ingredientPropTypes } from '../../utils/prop-types'
 import { useDrag } from 'react-dnd'
 import { useLocation, useNavigate } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import LoadedImage from '../UI/loaded-image/loaded-image'
+import ClipLoader from 'react-spinners/ClipLoader'
+import { TIngredient } from '../../utils/types'
 
-export default function IngredientCard({ ingredient, count = 0 }) {
+type TProps = {
+  ingredient: Readonly<TIngredient>
+  count?: number
+}
+
+export default function IngredientCard({ ingredient, count = 0 }: TProps) {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -39,13 +45,17 @@ export default function IngredientCard({ ingredient, count = 0 }) {
       style={{ opacity }}
     >
       <div className={`${style.image} ml-4 mr-4 mb-1`}>
-        <img src={ingredient.image} alt={ingredient.name} />
+        <LoadedImage
+          src={ingredient.image}
+          alt={ingredient.name}
+          preloader={<ClipLoader color="#f04ab9" size="100px" />}
+        />
       </div>
       <div className={`${style.price} mb-1`}>
         <span className="text text_type_digits-default">
           {ingredient.price}{' '}
         </span>
-        <CurrencyIcon />
+        <CurrencyIcon type="primary" />
       </div>
       <div className={style.description}>
         <p className="text text_type_main-default">{ingredient.name}</p>
@@ -57,9 +67,4 @@ export default function IngredientCard({ ingredient, count = 0 }) {
       )}
     </button>
   )
-}
-
-IngredientCard.propTypes = {
-  ingredient: ingredientPropTypes().isRequired,
-  count: PropTypes.number
 }

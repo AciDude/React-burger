@@ -7,8 +7,11 @@ import {
   ListIcon
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { NavLink, useMatch } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectUserName } from '../../services/selectors'
 
 const AppHeader = React.memo(function () {
+  const name = useSelector(selectUserName)
   const constructorMatchPath = useMatch({
     path: '/',
     end: true
@@ -22,7 +25,7 @@ const AppHeader = React.memo(function () {
     end: false
   })
 
-  const setType = obj => (obj ? 'primary' : 'secondary')
+  const setType = (obj: object | null): 'primary' | 'secondary' => (obj ? 'primary' : 'secondary')
 
   const classesArray = [
     'pl-5',
@@ -37,7 +40,7 @@ const AppHeader = React.memo(function () {
   ]
   const classes = classesArray.join(' ')
 
-  const setActive = ({ isActive }) =>
+  const setActive = ({ isActive }: {isActive: boolean}): string | undefined =>
     isActive ? `${classes} ${style.active}` : `${classes} ${style.inactive}`
 
   return (
@@ -65,7 +68,7 @@ const AppHeader = React.memo(function () {
         <div className={style.profile}>
           <NavLink to="/profile" className={setActive}>
             <ProfileIcon type={setType(profileMatchPath)} />
-            <span className="ml-2">Личный кабинет</span>
+            <span className="ml-2">{name || 'Личный кабинет'}</span>
           </NavLink>
         </div>
       </div>

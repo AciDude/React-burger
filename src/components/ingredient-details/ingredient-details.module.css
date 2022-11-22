@@ -17,5 +17,6 @@
    align-items: center;
 }
 .image {
-   min-height: 240px;
+   min-height: 245px;
+   position: relative;
 }

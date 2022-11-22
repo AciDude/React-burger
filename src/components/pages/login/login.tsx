@@ -6,10 +6,12 @@ import {
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './login.module.css'
-import { useDispatch } from 'react-redux'
-import { authUser } from '../../../services/actions/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser } from '../../../services/actions/auth'
+import { selectLoginRequest } from '../../../services/selectors'
 
 export default function Login() {
+  const loginRequest = useSelector(selectLoginRequest)
   const location = useLocation()
   const dispatch = useDispatch()
 
@@ -18,26 +20,37 @@ export default function Login() {
     password: ''
   })
 
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value })
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(authUser('login', value))
+    dispatch<any>(loginUser(value))
   }
 
   return (
     <div className={style.container}>
       <form className={style.inputs} onSubmit={onSubmit}>
         <p className="text text_type_main-medium">Вход</p>
-        <EmailInput onChange={onChange} value={value.email} name={'email'} />
+        <EmailInput
+          onChange={onChange}
+          value={value.email}
+          name={'email'}
+          disabled={loginRequest}
+        />
         <PasswordInput
           onChange={onChange}
           value={value.password}
           name={'password'}
+          disabled={loginRequest}
         />
-        <Button type="primary" size="medium" htmlType="submit">
+        <Button
+          type="primary"
+          size="medium"
+          htmlType="submit"
+          disabled={loginRequest}
+        >
           Войти
         </Button>
       </form>

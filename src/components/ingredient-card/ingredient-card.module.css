@@ -23,3 +23,7 @@
    top: 0;
    right: 0;
 }
+.image {
+   min-height: 122.4px;
+   position: relative;
+}

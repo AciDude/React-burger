@@ -7,10 +7,12 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './register.module.css'
 import { Link, useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { authUser } from '../../../services/actions/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from '../../../services/actions/auth'
+import { selectRegisterRequest } from '../../../services/selectors'
 
 export default function Register() {
+  const registerRequest = useSelector(selectRegisterRequest)
   const dispatch = useDispatch()
   const location = useLocation()
 
@@ -20,13 +22,13 @@ export default function Register() {
     password: ''
   })
 
-  const onChange = e => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue({ ...value, [e.target.name]: e.target.value })
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(authUser('register', value))
+    dispatch<any>(registerUser(value))
   }
 
   return (
@@ -39,14 +41,26 @@ export default function Register() {
           onChange={onChange}
           value={value.name}
           name={'name'}
+          disabled={registerRequest}
         />
-        <EmailInput onChange={onChange} value={value.email} name={'email'} />
+        <EmailInput
+          onChange={onChange}
+          value={value.email}
+          name={'email'}
+          disabled={registerRequest}
+        />
         <PasswordInput
           onChange={onChange}
           value={value.password}
           name={'password'}
+          disabled={registerRequest}
         />
-        <Button type="primary" size="medium" htmlType="submit">
+        <Button
+          type="primary"
+          size="medium"
+          htmlType="submit"
+          disabled={registerRequest}
+        >
           Зарегистрироваться
         </Button>
       </form>

@@ -5,53 +5,69 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './reset-password.module.css'
 import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
-import { BASE_URL } from '../../../utils/base-url'
-import { request } from '../../../utils/request'
+import { passwordChangeAPI } from '../../../utils/burger-api'
+import { TPasswordChange } from '../../../utils/types'
+
+type THidden = {
+  type: 'text'
+  icon: 'HideIcon'
+}
+
+type TShow = {
+  type: 'password'
+  icon: 'ShowIcon'
+}
+type TState = {
+  value: TPasswordChange
+  inputType: THidden | TShow
+  isRequest: boolean
+}
+
+const inputShowTextProps: THidden = {
+  type: 'text',
+  icon: 'HideIcon'
+}
+const inputHiddenTextProps: TShow = {
+  type: 'password',
+  icon: 'ShowIcon'
+}
 
 export default function ResetPassword() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [value, setValue] = useState({
-    token: '',
-    password: ''
-  })
-  const [inputType, setInputType] = useState({
-    type: 'password',
-    icon: 'ShowIcon'
+  const [state, setState] = useState<TState>({
+    value: { token: '', password: '' },
+    inputType: inputHiddenTextProps,
+    isRequest: false
   })
 
   const toggleInputType = () =>
-    setInputType(
-      inputType.type === 'password'
-        ? {
-            type: 'text',
-            icon: 'HideIcon'
-          }
-        : {
-            type: 'password',
-            icon: 'ShowIcon'
-          }
-    )
+    setState({
+      ...state,
+      inputType:
+        state.inputType.type === 'password'
+          ? inputShowTextProps
+          : inputHiddenTextProps
+    })
 
-  const onChange = e => {
-    setValue({ ...value, [e.target.name]: e.target.value })
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      value: { ...state.value, [e.target.name]: e.target.value }
+    })
   }
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify(value)
-    }
-    request(`${BASE_URL}password-reset/reset`, options).then(() =>
-      navigate('/login', {
-        state: location.state
-      })
-    )
+    setState({ ...state, isRequest: true })
+    passwordChangeAPI(state.value)
+      .then(() =>
+        navigate('/login', {
+          state: location.state
+        })
+      )
+      .catch(err => setState({ ...state, isRequest: false }))
   }
 
   if (
@@ -65,22 +81,29 @@ export default function ResetPassword() {
       <form className={style.inputs} onSubmit={onSubmit}>
         <p className="text text_type_main-medium">Восстановление пароля</p>
         <Input
-          type={inputType.type}
+          type={state.inputType.type}
           placeholder="Введите новый пароль"
           onChange={onChange}
-          value={value.password}
+          value={state.value.password}
           name={'password'}
-          icon={inputType.icon}
+          icon={state.inputType.icon}
           onIconClick={toggleInputType}
+          disabled={state.isRequest}
         />
         <Input
           type="text"
           placeholder="Введите код из письма"
           onChange={onChange}
-          value={value.token}
+          value={state.value.token}
           name={'token'}
+          disabled={state.isRequest}
         />
-        <Button type="primary" size="medium" htmlType="submit">
+        <Button
+          type="primary"
+          size="medium"
+          htmlType="submit"
+          disabled={state.isRequest}
+        >
           Сохранить
         </Button>
       </form>

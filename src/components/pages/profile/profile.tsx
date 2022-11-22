@@ -1,7 +1,6 @@
 import React from 'react'
 import style from './profile.module.css'
-import { Route, Routes, NavLink, useNavigate } from 'react-router-dom'
-import Person from '../person/person'
+import { NavLink, useNavigate, Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logoutUser } from '../../../services/actions/auth'
 
@@ -9,13 +8,13 @@ export default function Profile() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const linkClasses = `${style.link} text text_type_main-medium`
-  const setActive = ({ isActive }) =>
+  const setActive = ({ isActive }: { isActive: boolean }): string | undefined =>
     isActive
       ? `${linkClasses} ${style.active}`
       : `${linkClasses} ${style.inactive} text_color_inactive`
 
   const onClick = () => {
-    dispatch(logoutUser())
+    dispatch<any>(logoutUser())
     navigate('/')
   }
   return (
@@ -49,9 +48,7 @@ export default function Profile() {
         </p>
       </div>
       <div className={style.content}>
-        <Routes>
-          <Route index element={<Person />} />
-        </Routes>
+        <Outlet />
       </div>
     </div>
   )

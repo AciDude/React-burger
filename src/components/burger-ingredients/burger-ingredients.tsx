@@ -3,30 +3,38 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsSection from '../ingredients-section/ingredients-section'
 import style from './burger-ingredients.module.css'
 import { useSelector } from 'react-redux'
+import {
+  selectBuns,
+  selectMains,
+  selectSauces,
+  selectConstructorBun,
+  selectConstructorFillings
+} from '../../services/selectors'
 
 const BurgerIngredients = function () {
-  const getIngredientsOfType = (state, type) =>
-    state.burgerIngredients.ingredients.filter(
-      ingredient => ingredient.type === type
-    )
+  const buns = useSelector(selectBuns)
+  const mains = useSelector(selectMains)
+  const sauces = useSelector(selectSauces)
+  const bun = useSelector(selectConstructorBun)
+  const fillings = useSelector(selectConstructorFillings)
 
-  const buns = useSelector(state => getIngredientsOfType(state, 'bun'))
-  const mains = useSelector(state => getIngredientsOfType(state, 'main'))
-  const sauces = useSelector(state => getIngredientsOfType(state, 'sauce'))
-  const { bun, fillings } = useSelector(state => state.burgerConstructor)
-  const refViewportObserve = useRef()
-  const refBuns = useRef()
-  const refMain = useRef()
-  const refSauces = useRef()
-  const observerRef = useRef()
-  const [tabs, setTabs] = useState([])
+  const refViewportObserve = useRef<HTMLDivElement>(null)
+  const refBuns = useRef<HTMLDivElement>(null)
+  const refMain = useRef<HTMLDivElement>(null)
+  const refSauces = useRef<HTMLDivElement>(null)
+  const observerRef = useRef<IntersectionObserver>()
+  const [isActiveTab, setIsActiveTab] = useState({
+    buns: true,
+    mains: false,
+    sauces: false
+  })
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       entries => {
         const dataFromEntries = entries.map(entry => {
           const intersectionRatio = entry.intersectionRatio
-          const entryType = entry.target.dataset.type
+          const entryType = (entry.target as HTMLElement).dataset.type
           const rectY = entry.boundingClientRect.y
           return { intersectionRatio, entryType, rectY }
         })
@@ -35,33 +43,14 @@ const BurgerIngredients = function () {
             ? objA.rectY - objB.rectY
             : objB.intersectionRatio - objA.intersectionRatio
         })
-        setTabs(
-          [
-            {
-              type: 'buns',
-              isActive: true,
-              text: 'Булки',
-              element: refBuns.current
-            },
-            {
-              type: 'sauces',
-              isActive: false,
-              text: 'Соусы',
-              element: refSauces.current
-            },
-            {
-              type: 'mains',
-              isActive: false,
-              text: 'Начинки',
-              element: refMain.current
-            }
-          ].map(tab => {
-            return {
-              ...tab,
-              isActive: tab.type === dataFromEntries[0].entryType
-            }
+        const activeTab = dataFromEntries[0].entryType
+        activeTab &&
+          setIsActiveTab({
+            buns: false,
+            mains: false,
+            sauces: false,
+            [activeTab]: true
           })
-        )
       },
       {
         root: refViewportObserve.current,
@@ -69,11 +58,16 @@ const BurgerIngredients = function () {
         threshold: 0
       }
     )
-    const setObserve = (observer, ...array) => {
+
+    const setObserve = (
+      observer: IntersectionObserver,
+      ...array: Array<HTMLDivElement | null>
+    ) => {
       array.forEach(element => {
         element && observer.observe(element)
       })
     }
+
     setObserve(
       observerRef.current,
       refSauces.current,
@@ -82,12 +76,12 @@ const BurgerIngredients = function () {
     )
 
     return () => {
-      observerRef.current.disconnect()
+      observerRef.current?.disconnect()
     }
   }, [observerRef, refBuns, refSauces, refMain])
 
   const count = useMemo(() => {
-    const obj = { [bun?._id]: 1 }
+    const obj = bun ? { [bun._id]: 1 } : {}
     fillings.forEach(filling =>
       obj[filling._id] ? obj[filling._id]++ : (obj[filling._id] = 1)
     )
@@ -95,7 +89,7 @@ const BurgerIngredients = function () {
   }, [bun, fillings])
 
   const onClickTab = useCallback(
-    element => element.scrollIntoView({ behavior: 'smooth' }),
+    (element: HTMLDivElement) => element.scrollIntoView({ behavior: 'smooth' }),
     []
   )
 
@@ -103,15 +97,27 @@ const BurgerIngredients = function () {
     <section className={`${style.section} mt-10 mb-10`}>
       <h1 className="text text_type_main-large mb-5">Соберите бургер</h1>
       <div className={style.tab}>
-        {tabs.map((tab, i) => (
-          <Tab
-            key={i}
-            active={tab.isActive}
-            onClick={() => onClickTab(tab.element)}
-          >
-            {tab.text}
-          </Tab>
-        ))}
+        <Tab
+          active={isActiveTab.buns}
+          onClick={() => refBuns.current && onClickTab(refBuns.current)}
+          value="buns"
+        >
+          Булки
+        </Tab>
+        <Tab
+          active={isActiveTab.sauces}
+          onClick={() => refSauces.current && onClickTab(refSauces.current)}
+          value="sauces"
+        >
+          Соусы
+        </Tab>
+        <Tab
+          active={isActiveTab.mains}
+          onClick={() => refMain.current && onClickTab(refMain.current)}
+          value="mains"
+        >
+          Начинки
+        </Tab>
       </div>
       <div ref={refViewportObserve} className={style.ingredients}>
         <IngredientsSection

@@ -5,37 +5,34 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './forgot-password.module.css'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BASE_URL } from '../../../utils/base-url'
-import { request } from '../../../utils/request'
+import { passwordResetAPI } from '../../../utils/burger-api'
 
 export default function ForgotPassword() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [value, setValue] = useState({
-    email: ''
+  const [state, setState] = useState({
+    email: '',
+    isRequest: false
   })
 
-  const onChange = e => setValue({ email: e.target.value })
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setState({ ...state, email: e.target.value })
 
-  const onSubmit = e => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify(value)
-    }
-    request(`${BASE_URL}password-reset`, options).then(() =>
-      navigate('/reset-password', {
-        state: {
-          prevPathname: location.pathname,
-          request: true,
-          pathname: location.state?.pathname
-        }
-      })
-    )
+    setState({ ...state, isRequest: true })
+    passwordResetAPI({ email: state.email })
+      .then(() =>
+        navigate('/reset-password', {
+          state: {
+            prevPathname: location.pathname,
+            request: true,
+            pathname: location.state?.pathname
+          }
+        })
+      )
+      .catch(err => setState({ ...state, isRequest: false }))
   }
 
   return (
@@ -46,10 +43,16 @@ export default function ForgotPassword() {
           type="email"
           placeholder="Укажите e-mail"
           onChange={onChange}
-          value={value.email}
+          value={state.email}
           name={'email'}
+          disabled={state.isRequest}
         />
-        <Button type="primary" size="medium" htmlType="submit">
+        <Button
+          type="primary"
+          size="medium"
+          htmlType="submit"
+          disabled={state.isRequest}
+        >
           Восстановить
         </Button>
       </form>
