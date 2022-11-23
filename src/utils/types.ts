@@ -127,3 +127,26 @@ export type TPasswordChange = {
   readonly token: string
   readonly password: string
 }
+
+export type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
+  [key in TDataKey]: TDataType
+} & {
+  readonly success: boolean
+  readonly message?: string
+  readonly headers?: Headers
+}
+
+export interface CustomBody<T extends any> extends Body {
+  json(): Promise<T>
+}
+
+export interface CustomResponse<T> extends CustomBody<T> {
+  readonly headers: Headers
+  readonly ok: boolean
+  readonly redirected: boolean
+  readonly status: number
+  readonly statusText: string
+  readonly type: ResponseType
+  readonly url: string
+  clone(): Response
+}

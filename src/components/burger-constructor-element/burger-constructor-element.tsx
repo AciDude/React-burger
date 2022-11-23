@@ -62,7 +62,6 @@ export default function BurgerConstructorElement({
       ;(item as { id: string; index: number }).index = hoverIndex
     }
   })
-  console.log(handlerId)
 
   const [{ isDragging }, drag] = useDrag({
     type: 'component',

@@ -1,28 +1,25 @@
 import React, { useState } from 'react'
+import { useForm } from '../../hooks/use-form'
 import {
   Button,
   Input
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './forgot-password.module.css'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { passwordResetAPI } from '../../../utils/burger-api'
+import { passwordResetAPI } from '../../utils/burger-api'
 
 export default function ForgotPassword() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [state, setState] = useState({
-    email: '',
-    isRequest: false
-  })
+  const { values, handleChange } = useForm({ email: '' })
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setState({ ...state, email: e.target.value })
+  const [isRequest, setIsRequest] = useState(false)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setState({ ...state, isRequest: true })
-    passwordResetAPI({ email: state.email })
+    setIsRequest(true)
+    passwordResetAPI(values)
       .then(() =>
         navigate('/reset-password', {
           state: {
@@ -32,7 +29,7 @@ export default function ForgotPassword() {
           }
         })
       )
-      .catch(err => setState({ ...state, isRequest: false }))
+      .catch(err => setIsRequest(false))
   }
 
   return (
@@ -42,16 +39,16 @@ export default function ForgotPassword() {
         <Input
           type="email"
           placeholder="Укажите e-mail"
-          onChange={onChange}
-          value={state.email}
+          onChange={handleChange}
+          value={values.email}
           name={'email'}
-          disabled={state.isRequest}
+          disabled={isRequest}
         />
         <Button
           type="primary"
           size="medium"
           htmlType="submit"
-          disabled={state.isRequest}
+          disabled={isRequest}
         >
           Восстановить
         </Button>

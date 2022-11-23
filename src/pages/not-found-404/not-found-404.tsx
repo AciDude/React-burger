@@ -1,7 +1,7 @@
 import React from 'react'
-import image from '../../../image/404-error.png'
+import image from '../../image/404-error.png'
 import style from './not-found-404.module.css'
-import LoadedImage from '../../UI/loaded-image/loaded-image'
+import LoadedImage from '../../components/UI/loaded-image/loaded-image'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 export default function NotFound404() {

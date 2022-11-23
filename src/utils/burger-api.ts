@@ -5,7 +5,9 @@ import {
   TRegister,
   TPatch,
   TPasswordReset,
-  TPasswordChange
+  TPasswordChange,
+  CustomResponse,
+  TResponseBody
 } from './types'
 
 const BASE_URL = 'https://norma.nomoreparties.space/api/'
@@ -23,7 +25,7 @@ const setOptions: (
   body: JSON.stringify(body)
 })
 
-const checkResponse = (response: Response) => {
+const checkResponse = <T>(response: CustomResponse<T>) => {
   if (!response.ok) {
     if (response.status === 403)
       return response.json().then(err => Promise.reject(err))
@@ -32,26 +34,31 @@ const checkResponse = (response: Response) => {
   return response.json()
 }
 
-export function request(
+export function request<TKey extends string = '', TValues = {}>(
   url: RequestInfo | URL,
   options?: RequestInit | undefined
 ) {
-  return fetch(url, options).then(checkResponse)
+  return fetch(url, options)
+    .then<TResponseBody<TKey, TValues>>(checkResponse)
+    .then(res => (res?.success ? res : Promise.reject(res)))
 }
 
 export function refreshTokenApi() {
-  return request(
+  return request<'accessToken' | 'refreshToken', string>(
     `${BASE_URL}auth/token`,
     setOptions('POST', defaultHeaders, {
       token: localStorage.getItem('refreshToken')
     })
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
-export async function requestWithRefresh(
+export async function requestWithRefresh<
+  TKey extends string = '',
+  TValues = {}
+>(
   url: RequestInfo | URL,
   options: RequestInit | undefined
-) {
+): Promise<TResponseBody<TKey, TValues>> {
   try {
     return await request(url, options)
   } catch (err) {
@@ -71,9 +78,7 @@ export async function requestWithRefresh(
 }
 
 export function getIngredientsAPI() {
-  return request(`${BASE_URL}ingredients`).then(res =>
-    res?.success ? res.data : Promise.reject(res)
-  )
+  return request<'data', TIngredients>(`${BASE_URL}ingredients`)
 }
 
 export function getOrderAPI(body: { ingredients: TIngredients }) {
@@ -87,21 +92,21 @@ export function getOrderAPI(body: { ingredients: TIngredients }) {
       },
       body
     )
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
 export function loginAPI(body: TLogin) {
-  return request(
-    `${BASE_URL}auth/login`,
-    setOptions('POST', defaultHeaders, body)
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  return request<
+    'accessToken' | 'refreshToken' | 'user',
+    string | { [name: string]: string }
+  >(`${BASE_URL}auth/login`, setOptions('POST', defaultHeaders, body))
 }
 
 export function registerAPI(body: TRegister) {
-  return request(
-    `${BASE_URL}auth/register`,
-    setOptions('POST', defaultHeaders, body)
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  return request<
+    'accessToken' | 'refreshToken' | 'user',
+    string | { [name: string]: string }
+  >(`${BASE_URL}auth/register`, setOptions('POST', defaultHeaders, body))
 }
 
 export function getUserAPI() {
@@ -111,7 +116,7 @@ export function getUserAPI() {
       ...defaultHeaders,
       Authorization: `Bearer ${getCookie('accessToken')}`
     })
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
 export function patchUserAPI(body: TPatch) {
@@ -125,7 +130,7 @@ export function patchUserAPI(body: TPatch) {
       },
       body
     )
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
 export function logoutAPI() {
@@ -134,19 +139,19 @@ export function logoutAPI() {
     setOptions('POST', defaultHeaders, {
       token: localStorage.getItem('refreshToken')
     })
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
 export function passwordResetAPI(body: TPasswordReset) {
   return request(
     `${BASE_URL}password-reset`,
     setOptions('POST', defaultHeaders, body)
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }
 
 export function passwordChangeAPI(body: TPasswordChange) {
   return request(
     `${BASE_URL}password-reset/reset`,
     setOptions('POST', defaultHeaders, body)
-  ).then(res => (res?.success ? res : Promise.reject(res)))
+  )
 }

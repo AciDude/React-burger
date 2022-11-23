@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
+import { useForm } from '../../hooks/use-form'
 import {
   Input,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './reset-password.module.css'
 import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
-import { passwordChangeAPI } from '../../../utils/burger-api'
-import { TPasswordChange } from '../../../utils/types'
+import { passwordChangeAPI } from '../../utils/burger-api'
 
 type THidden = {
   type: 'text'
@@ -18,7 +18,6 @@ type TShow = {
   icon: 'ShowIcon'
 }
 type TState = {
-  value: TPasswordChange
   inputType: THidden | TShow
   isRequest: boolean
 }
@@ -36,8 +35,12 @@ export default function ResetPassword() {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const { values, handleChange } = useForm({
+    token: '',
+    password: ''
+  })
+
   const [state, setState] = useState<TState>({
-    value: { token: '', password: '' },
     inputType: inputHiddenTextProps,
     isRequest: false
   })
@@ -51,17 +54,10 @@ export default function ResetPassword() {
           : inputHiddenTextProps
     })
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      value: { ...state.value, [e.target.name]: e.target.value }
-    })
-  }
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setState({ ...state, isRequest: true })
-    passwordChangeAPI(state.value)
+    passwordChangeAPI(values)
       .then(() =>
         navigate('/login', {
           state: location.state
@@ -83,8 +79,8 @@ export default function ResetPassword() {
         <Input
           type={state.inputType.type}
           placeholder="Введите новый пароль"
-          onChange={onChange}
-          value={state.value.password}
+          onChange={handleChange}
+          value={values.password}
           name={'password'}
           icon={state.inputType.icon}
           onIconClick={toggleInputType}
@@ -93,8 +89,8 @@ export default function ResetPassword() {
         <Input
           type="text"
           placeholder="Введите код из письма"
-          onChange={onChange}
-          value={state.value.token}
+          onChange={handleChange}
+          value={values.token}
           name={'token'}
           disabled={state.isRequest}
         />

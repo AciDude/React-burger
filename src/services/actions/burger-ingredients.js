@@ -13,10 +13,10 @@ export function getIngredients() {
       type: GET_INGREDIENTS_REQUEST
     })
     getIngredientsAPI()
-      .then(data => {
+      .then(res => {
         dispatch({
           type: GET_INGREDIENTS_SUCCESS,
-          ingredients: data
+          ingredients: res.data
         })
       })
       .catch(error =>

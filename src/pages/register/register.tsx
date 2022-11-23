@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from '../../hooks/use-form'
 import {
   EmailInput,
   PasswordInput,
@@ -8,27 +9,23 @@ import {
 import style from './register.module.css'
 import { Link, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerUser } from '../../../services/actions/auth'
-import { selectRegisterRequest } from '../../../services/selectors'
+import { registerUser } from '../../services/actions/auth'
+import { selectRegisterRequest } from '../../services/selectors'
 
 export default function Register() {
   const registerRequest = useSelector(selectRegisterRequest)
   const dispatch = useDispatch()
   const location = useLocation()
 
-  const [value, setValue] = useState({
+  const { values, handleChange } = useForm({
     name: '',
     email: '',
     password: ''
   })
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({ ...value, [e.target.name]: e.target.value })
-  }
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch<any>(registerUser(value))
+    dispatch<any>(registerUser(values))
   }
 
   return (
@@ -38,20 +35,20 @@ export default function Register() {
         <Input
           type="text"
           placeholder="Имя"
-          onChange={onChange}
-          value={value.name}
+          onChange={handleChange}
+          value={values.name}
           name={'name'}
           disabled={registerRequest}
         />
         <EmailInput
-          onChange={onChange}
-          value={value.email}
+          onChange={handleChange}
+          value={values.email}
           name={'email'}
           disabled={registerRequest}
         />
         <PasswordInput
-          onChange={onChange}
-          value={value.password}
+          onChange={handleChange}
+          value={values.password}
           name={'password'}
           disabled={registerRequest}
         />

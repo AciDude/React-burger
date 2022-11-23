@@ -6,8 +6,8 @@ import {
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import { useSelector, useDispatch } from 'react-redux'
-import { patchUser } from '../../../services/actions/auth'
-import { selectUser } from '../../../services/selectors'
+import { patchUser } from '../../services/actions/auth'
+import { selectUser } from '../../services/selectors'
 
 type TInputs = 'name' | 'email' | 'password'
 
@@ -27,12 +27,11 @@ export default function Person() {
   useEffect(() => {
     if (user)
       setInputsState({
-        ...inputsState,
-        name: { ...inputsState.name, value: user.name, isChanged: false },
-        email: { ...inputsState.email, value: user.email, isChanged: false },
-        password: { ...inputsState.password, value: '', isChanged: false }
+        name: { value: user.name, isChanged: false, isFocused: false },
+        email: { value: user.email, isChanged: false, isFocused: false },
+        password: { value: '', isChanged: false, isFocused: false }
       })
-  }, [user, inputsState])
+  }, [user])
 
   const onIconClick = (element: HTMLInputElement | null) => {
     if (element) {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from '../../hooks/use-form'
 import { Link, useLocation } from 'react-router-dom'
 import {
   EmailInput,
@@ -7,26 +8,22 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './login.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../../../services/actions/auth'
-import { selectLoginRequest } from '../../../services/selectors'
+import { loginUser } from '../../services/actions/auth'
+import { selectLoginRequest } from '../../services/selectors'
 
 export default function Login() {
   const loginRequest = useSelector(selectLoginRequest)
   const location = useLocation()
   const dispatch = useDispatch()
 
-  const [value, setValue] = useState({
+  const { values, handleChange } = useForm({
     email: '',
     password: ''
   })
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue({ ...value, [e.target.name]: e.target.value })
-  }
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch<any>(loginUser(value))
+    dispatch<any>(loginUser(values))
   }
 
   return (
@@ -34,14 +31,14 @@ export default function Login() {
       <form className={style.inputs} onSubmit={onSubmit}>
         <p className="text text_type_main-medium">Вход</p>
         <EmailInput
-          onChange={onChange}
-          value={value.email}
+          onChange={handleChange}
+          value={values.email}
           name={'email'}
           disabled={loginRequest}
         />
         <PasswordInput
-          onChange={onChange}
-          value={value.password}
+          onChange={handleChange}
+          value={values.password}
           name={'password'}
           disabled={loginRequest}
         />

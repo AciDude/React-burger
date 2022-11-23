@@ -2,7 +2,7 @@ import React from 'react'
 import style from './profile.module.css'
 import { NavLink, useNavigate, Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { logoutUser } from '../../../services/actions/auth'
+import { logoutUser } from '../../services/actions/auth'
 
 export default function Profile() {
   const dispatch = useDispatch()
