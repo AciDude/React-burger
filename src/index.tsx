@@ -5,6 +5,9 @@ import App from './components/app/app';
 import reportWebVitals from './reportWebVitals';
 import { configureAppStore } from './services/store'
 import { Provider } from 'react-redux'
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom'
 
 const store = configureAppStore()
 
@@ -12,9 +15,11 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <Router>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>
 );
 
 // If you want to start measuring performance in your app, pass a function
