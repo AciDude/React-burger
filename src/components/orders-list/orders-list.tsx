@@ -1,14 +1,14 @@
 import React from 'react'
 import style from './orders-list.module.css'
 import OrderCard from '..//order-cart/order-card'
-import { useSelector } from '../../hooks'
+import { TOrder } from '../../utils/data-types'
 
 type TProps = {
   readonly statusShowed?: boolean
+  readonly orders: ReadonlyArray<TOrder>
 }
 
-export default function OrdersList({ statusShowed = false }: TProps) {
-  const orders = useSelector(state => state.websocket.data?.orders)
+export default function OrdersList({ statusShowed = false, orders }: TProps) {
   return (
     <div className={`${style.container}`}>
       {orders &&

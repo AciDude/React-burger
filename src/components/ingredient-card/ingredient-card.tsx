@@ -5,7 +5,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './ingredient-card.module.css'
 import { useDrag } from 'react-dnd'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import LoadedImage from '../UI/loaded-image/loaded-image'
 import ClipLoader from 'react-spinners/ClipLoader'
 import {
@@ -21,15 +21,8 @@ type TProps = {
 
 export default function IngredientCard({ ingredient, count = 0 }: TProps) {
   const location = useLocation()
-  const navigate = useNavigate()
 
   const ingredientId = ingredient._id
-
-  const onClick = () => {
-    navigate(`/ingredients/${ingredientId}`, {
-      state: { background: location }
-    })
-  }
 
   const [{ opacity }, dragRef] = useDrag({
     type: 'ingredient',
@@ -40,12 +33,13 @@ export default function IngredientCard({ ingredient, count = 0 }: TProps) {
   })
 
   return (
-    <button
+    <Link
+      to={`/ingredients/${ingredientId}`}
+      state={{ background: location }}
       key={ingredientId}
       ref={dragRef}
       type="button"
       className={style.card}
-      onClick={onClick}
       style={{ opacity }}
     >
       <div className={`${style.image} ml-4 mr-4 mb-1`}>
@@ -69,6 +63,6 @@ export default function IngredientCard({ ingredient, count = 0 }: TProps) {
           <Counter count={count} size={count >= 10 ? 'small' : 'default'} />
         </div>
       )}
-    </button>
+    </Link>
   )
 }

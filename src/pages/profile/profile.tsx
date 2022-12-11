@@ -1,13 +1,27 @@
 import React, { useEffect } from 'react'
 import style from './profile.module.css'
-import { NavLink, useNavigate, Outlet, useMatch } from 'react-router-dom'
-import { useDispatch } from '../../hooks'
+import {
+  NavLink,
+  useNavigate,
+  Outlet,
+  useMatch,
+  Route,
+  Routes
+} from 'react-router-dom'
+import { useDispatch, useSelector } from '../../hooks'
 import { logoutUser } from '../../services/actions/auth'
-import { connect, disconnect } from '../../services/actions/web-socket'
+import {
+  connectUsersOrders,
+  disconnectUsersOrders
+} from '../../services/actions/ws-users-orders'
 import { BASE_WS_URL } from '../../utils/burger-api'
 import { getCookie } from '../../utils/cookies'
+import OrdersList from '../../components/orders-list/orders-list'
+import { selectUsersOrders } from '../../services/selectors'
+import Person from '../person/person'
 
 export default function Profile() {
+  const orders = useSelector(selectUsersOrders)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const linkClasses = `${style.link} text text_type_main-medium`
@@ -17,9 +31,13 @@ export default function Profile() {
       : `${linkClasses} ${style.inactive} text_color_inactive`
 
   useEffect(() => {
-    dispatch(connect(`${BASE_WS_URL}orders?token=${getCookie('accessToken')}`))
+    dispatch(
+      connectUsersOrders(
+        `${BASE_WS_URL}orders?token=${getCookie('accessToken')}`
+      )
+    )
     return () => {
-      dispatch(disconnect())
+      dispatch(disconnectUsersOrders())
     }
   }, [dispatch])
 
@@ -34,6 +52,12 @@ export default function Profile() {
   })
 
   const classContent = matchPath ? style.list : style.form
+
+  const descriptionText = `В этом разделе вы можете ${
+    matchPath
+      ? 'просмотреть свою историю заказов'
+      : 'изменить свои персональные данные'
+  }`
 
   return (
     <div className={style.container}>
@@ -62,11 +86,19 @@ export default function Profile() {
         <p
           className={`text text_type_main-default text_color_inactive ${style.description}`}
         >
-          В этом разделе вы можете изменить свои персональные данные
+          {descriptionText}
         </p>
       </div>
       <div className={classContent}>
-        <Outlet />
+        <Routes>
+          <Route index element={<Person />} />
+          {orders && (
+            <Route
+              path="orders"
+              element={<OrdersList orders={orders} statusShowed={true} />}
+            />
+          )}
+        </Routes>
       </div>
     </div>
   )

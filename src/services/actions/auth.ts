@@ -6,9 +6,26 @@ import {
   registerAPI
 } from '../../utils/burger-api'
 import { saveTokens, getCookie, deleteCookie } from '../../utils/cookies'
-import { TUser } from '../../utils/data-types'
 import { AppThunk } from '../types'
-import { TLogin, TRegister, TPatch } from '../../utils/data-types'
+import { TLogin, TRegister, TPatch, TUser } from '../../utils/data-types'
+import {
+  TLoginRequestAction,
+  TCheckUserAuthAction,
+  TGetUserFailedAction,
+  TGetUserRequestAction,
+  TGetUserSuccessAction,
+  TLoginFailedAction,
+  TLoginSuccessAction,
+  TLogoutUserFailedAction,
+  TLogoutUserRequestAction,
+  TLogoutUserSuccessAction,
+  TPatchUserFailedAction,
+  TPatchUserRequestAction,
+  TPatchUserSuccessAction,
+  TRegisterFailedAction,
+  TRegisterRequestAction,
+  TRegisterSuccessAction
+} from '../types/auth'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -31,64 +48,6 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILED = 'LOGOUT_FAILED'
 
 export const CHECK_USER_AUTH = 'CHECK_USER_AUTH'
-
-export type TLoginRequestAction = {
-  readonly type: typeof LOGIN_REQUEST
-}
-export type TLoginSuccessAction = {
-  readonly type: typeof LOGIN_SUCCESS
-  readonly payload: TUser
-}
-export type TLoginFailedAction = {
-  readonly type: typeof LOGIN_FAILED
-  readonly payload: string
-}
-export type TRegisterRequestAction = {
-  readonly type: typeof REGISTER_REQUEST
-}
-export type TRegisterSuccessAction = {
-  readonly type: typeof REGISTER_SUCCESS
-  readonly payload: TUser
-}
-export type TRegisterFailedAction = {
-  readonly type: typeof REGISTER_FAILED
-  readonly payload: string
-}
-export type TGetUserRequestAction = {
-  readonly type: typeof GET_USER_REQUEST
-}
-export type TGetUserSuccessAction = {
-  readonly type: typeof GET_USER_SUCCESS
-  readonly payload: TUser
-}
-export type TGetUserFailedAction = {
-  readonly type: typeof GET_USER_FAILED
-  readonly payload: string
-}
-export type TPatchUserRequestAction = {
-  readonly type: typeof PATCH_USER_REQUEST
-}
-export type TPatchUserSuccessAction = {
-  readonly type: typeof PATCH_USER_SUCCESS
-  readonly payload: TUser
-}
-export type TPatchUserFailedAction = {
-  readonly type: typeof PATCH_USER_FAILED
-  readonly payload: string
-}
-export type TLogoutUserRequestAction = {
-  readonly type: typeof LOGOUT_REQUEST
-}
-export type TLogoutUserSuccessAction = {
-  readonly type: typeof LOGOUT_SUCCESS
-}
-export type TLogoutUserFailedAction = {
-  readonly type: typeof LOGOUT_FAILED
-  readonly payload: string
-}
-export type TCheckUserAuthAction = {
-  readonly type: typeof CHECK_USER_AUTH
-}
 
 export const loginRequest = (): TLoginRequestAction => ({
   type: LOGIN_REQUEST
@@ -147,24 +106,6 @@ export const logoutFailed = (payload: string): TLogoutUserFailedAction => ({
 export const checkUserAuth = (): TCheckUserAuthAction => ({
   type: CHECK_USER_AUTH
 })
-
-export type TAuthActions =
-  | TLoginRequestAction
-  | TLoginSuccessAction
-  | TLoginFailedAction
-  | TRegisterRequestAction
-  | TRegisterSuccessAction
-  | TRegisterFailedAction
-  | TGetUserRequestAction
-  | TGetUserSuccessAction
-  | TGetUserFailedAction
-  | TPatchUserRequestAction
-  | TPatchUserSuccessAction
-  | TPatchUserFailedAction
-  | TLogoutUserRequestAction
-  | TLogoutUserSuccessAction
-  | TLogoutUserFailedAction
-  | TCheckUserAuthAction
 
 export const loginUser =
   (body: TLogin): AppThunk =>

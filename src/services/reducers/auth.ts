@@ -14,10 +14,10 @@ import {
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
   LOGOUT_FAILED,
-  CHECK_USER_AUTH,
-  TAuthActions
+  CHECK_USER_AUTH
 } from '../actions/auth'
 import { TUser } from '../../utils/data-types'
+import { TAuthActions } from '../types/auth'
 
 export type TAuthState = {
   readonly user: TUser | null

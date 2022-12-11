@@ -67,3 +67,14 @@ export const selectSauces = (
 
 export const selectIngredient = (state: RootState) =>
   state.burgerIngredients.ingredients
+
+export const selectAllOrders = (state: RootState) =>
+  state.wsAllOrders.data?.orders
+
+export const selectUsersOrders = (state: RootState) =>
+  state.wsUsersOrders.data?.orders
+
+export const selectTotal = (state: RootState) => state.wsAllOrders.data?.total
+
+export const selectTotalToday = (state: RootState) =>
+  state.wsAllOrders.data?.totalToday

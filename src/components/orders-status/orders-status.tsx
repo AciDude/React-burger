@@ -1,17 +1,31 @@
 import React from 'react'
 import style from './orders-status.module.css'
+import { useSelector } from '../../hooks'
+import {
+  selectAllOrders,
+  selectTotal,
+  selectTotalToday
+} from '../../services/selectors'
 
-type TProps = {
-  readonly statusArray: ReadonlyArray<Array<number | never>>
-  readonly total: number
-  readonly totalToday: number
-}
+export default function OrdersStatus() {
+  const orders = useSelector(selectAllOrders)
+  const total = useSelector(selectTotal)
+  const totalToday = useSelector(selectTotalToday)
 
-export default function OrdersStatus({
-  statusArray,
-  total,
-  totalToday
-}: TProps) {
+  let statusArray: ReadonlyArray<Array<number | never>> = [[], []]
+
+  if (orders) {
+    statusArray = orders.reduce(
+      (acc: ReadonlyArray<Array<number | never>>, item) => {
+        item.status === 'done' && acc[0].length < 10 && acc[0].push(item.number)
+        item.status === 'pending' &&
+          acc[1].length < 10 &&
+          acc[1].push(item.number)
+        return acc
+      },
+      [[], []]
+    )
+  }
   return (
     <div className={`${style.container} text`}>
       <div className={`${style.status_container} text_type_main-medium`}>

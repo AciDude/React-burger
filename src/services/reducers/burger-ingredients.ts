@@ -1,10 +1,10 @@
 import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
-  GET_INGREDIENTS_FAILED,
-  TBurgerIngredientsActions
+  GET_INGREDIENTS_FAILED
 } from '../actions/burger-ingredients'
 import { TIngredients } from '../../utils/data-types'
+import { TBurgerIngredientsActions } from '../types/burger-ingredients'
 
 type TBurgerIngredientsState = {
   readonly ingredients: TIngredients

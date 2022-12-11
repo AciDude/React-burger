@@ -2,10 +2,10 @@ import {
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
   GET_ORDER_FAILED,
-  CLEAR_ORDER,
-  TOrderDetailsActions
+  CLEAR_ORDER
 } from '../actions/order-details'
 import { TOrder } from '../../utils/data-types'
+import { TOrderDetailsActions } from '../types/order-details'
 
 export type TOrderDetailsState = {
   readonly order: TOrder | null

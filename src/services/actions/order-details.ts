@@ -5,34 +5,24 @@ import {
   TIngredientBun,
   TIngredientMain,
   TIngredientSauce,
-  TOrderWithOwnerAndPrice
+  TOrder
 } from '../../utils/data-types'
+import {
+  TGetOrderRequestAction,
+  TClearOrderAction,
+  TGetOrderFailedAction,
+  TGetOrderSuccessAction
+} from '../types/order-details'
 
 export const GET_ORDER_REQUEST = 'GET_ORDER_REQUEST'
 export const GET_ORDER_SUCCESS = 'GET_ORDER_SUCCESS'
 export const GET_ORDER_FAILED = 'GET_ORDER_FAILED'
 export const CLEAR_ORDER = 'CLEAR_ORDER'
 
-export type TGetOrderRequestAction = {
-  readonly type: typeof GET_ORDER_REQUEST
-}
-export type TGetOrderSuccessAction = {
-  readonly type: typeof GET_ORDER_SUCCESS
-  readonly order: TOrderWithOwnerAndPrice
-}
-export type TGetOrderFailedAction = {
-  readonly type: typeof GET_ORDER_FAILED
-}
-export type TClearOrderAction = {
-  readonly type: typeof CLEAR_ORDER
-}
-
 export const getOrderRequest = (): TGetOrderRequestAction => ({
   type: GET_ORDER_REQUEST
 })
-export const getOrderSuccess = (
-  order: TOrderWithOwnerAndPrice
-): TGetOrderSuccessAction => ({
+export const getOrderSuccess = (order: TOrder): TGetOrderSuccessAction => ({
   type: GET_ORDER_SUCCESS,
   order
 })
@@ -42,12 +32,6 @@ export const getOrderFailed = (): TGetOrderFailedAction => ({
 export const clearOrder = (): TClearOrderAction => ({
   type: CLEAR_ORDER
 })
-
-export type TOrderDetailsActions =
-  | TGetOrderRequestAction
-  | TGetOrderSuccessAction
-  | TGetOrderFailedAction
-  | TClearOrderAction
 
 export function getOrder(
   bun: TIngredientBun,

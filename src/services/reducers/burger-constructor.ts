@@ -2,14 +2,14 @@ import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
   UPDATE_CONSTRUCTOR_LIST,
-  CLEAR_CONSTRUCTOR_LIST,
-  TBurgerConstructorActions
+  CLEAR_CONSTRUCTOR_LIST
 } from '../actions/burger-constructor'
 import {
   TIngredientBun,
   TIngredientMain,
   TIngredientSauce
 } from '../../utils/data-types'
+import { TBurgerConstructorActions } from '../types/burger-constructor'
 
 type TBurgerConstructorState = {
   readonly bun: TIngredientBun | null

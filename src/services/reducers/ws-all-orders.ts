@@ -1,12 +1,12 @@
 import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_START,
-  WS_CONNECTION_SUCCESS,
-  WS_GET_MESSAGE,
-  TWsActions
-} from '../actions/web-socket'
+  WS_CONNECTION_CLOSED_ALL_ORDERS,
+  WS_CONNECTION_ERROR_ALL_ORDERS,
+  WS_CONNECTION_START_ALL_ORDERS,
+  WS_CONNECTION_SUCCESS_ALL_ORDERS,
+  WS_GET_MESSAGE_ALL_ORDERS
+} from '../actions/ws-all-orders'
 import { TWSResponse } from '../../utils/data-types'
+import { TWsAllOrdersActions } from '../types/ws-all-orders'
 
 export type TWsState = {
   readonly data: TWSResponse | null
@@ -22,12 +22,12 @@ const initialState: TWsState = {
   wsConnect: false
 }
 
-export const wsReducer = (
+export const wsAllOrdersReducer = (
   state = initialState,
-  action: TWsActions
+  action: TWsAllOrdersActions
 ): TWsState => {
   switch (action.type) {
-    case WS_CONNECTION_START: {
+    case WS_CONNECTION_START_ALL_ORDERS: {
       return {
         ...state,
         wsConnecting: true,
@@ -35,7 +35,7 @@ export const wsReducer = (
         wsConnectingFailed: false
       }
     }
-    case WS_CONNECTION_SUCCESS: {
+    case WS_CONNECTION_SUCCESS_ALL_ORDERS: {
       return {
         ...state,
         wsConnecting: false,
@@ -43,7 +43,7 @@ export const wsReducer = (
         wsConnect: true
       }
     }
-    case WS_CONNECTION_ERROR: {
+    case WS_CONNECTION_ERROR_ALL_ORDERS: {
       return {
         ...state,
         wsConnect: false,
@@ -51,7 +51,7 @@ export const wsReducer = (
         wsConnectingFailed: true
       }
     }
-    case WS_CONNECTION_CLOSED: {
+    case WS_CONNECTION_CLOSED_ALL_ORDERS: {
       return {
         ...state,
         wsConnect: false,
@@ -60,7 +60,7 @@ export const wsReducer = (
         data: null
       }
     }
-    case WS_GET_MESSAGE: {
+    case WS_GET_MESSAGE_ALL_ORDERS: {
       return {
         ...state,
         data: action.payload

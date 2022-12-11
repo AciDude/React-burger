@@ -10,7 +10,6 @@ import {
   TResponseBody,
   TUser,
   TTokens,
-  TOrderWithOwnerAndPrice,
   TOrder
 } from './data-types'
 
@@ -59,13 +58,12 @@ export function refreshTokenApi() {
 
 export async function requestWithRefresh<T>(
   url: RequestInfo | URL,
-  options: RequestInit | undefined
+  options?: RequestInit
 ): Promise<TResponseBody<T>> {
   try {
     return await request(url, options)
   } catch (err) {
     if ((err as TResponseBody)?.message === 'jwt expired') {
-      console.log('REFRESH')
       const refreshData = await refreshTokenApi()
       const accessToken = refreshData.accessToken.split('Bearer ')[1]
       const refreshToken = refreshData.refreshToken
@@ -74,8 +72,6 @@ export async function requestWithRefresh<T>(
         'Authorization',
         `Bearer ${accessToken}`
       )
-      console.log(options?.headers)
-
       return request(url, options)
     }
     deleteCookie('accessToken')
@@ -91,7 +87,7 @@ export function getIngredientsAPI() {
 export function getOrderAPI(body: { ingredients: string[] }) {
   return requestWithRefresh<{
     readonly name: string
-    readonly order: TOrderWithOwnerAndPrice
+    readonly order: TOrder
   }>(
     `${BASE_URL}orders`,
     setOptions(
@@ -144,8 +140,6 @@ export function patchUserAPI(body: TPatch) {
 }
 
 export function logoutAPI() {
-  deleteCookie('accessToken')
-  localStorage.removeItem('refreshToken')
   return request(
     `${BASE_URL}auth/logout`,
     setOptions('POST', defaultHeaders, {
@@ -170,8 +164,6 @@ export function passwordChangeAPI(body: TPasswordChange) {
 
 export function getOrderByNumber(string: string) {
   return request<{
-    readonly orders: ReadonlyArray<
-      TOrder & { readonly __v: number; readonly owner: string }
-    >
+    readonly orders: ReadonlyArray<TOrder>
   }>(`${BASE_URL}orders/${string}`)
 }

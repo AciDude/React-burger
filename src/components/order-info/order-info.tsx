@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import style from './order-info.module.css'
-import { useParams } from 'react-router-dom'
+import { useParams, useMatch, useLocation } from 'react-router-dom'
 import { useSelector } from '../../hooks'
 import {
   TIngredientBun,
@@ -12,6 +12,11 @@ import IngredientIcon from '../UI/ingredient-icon/ingredient-icon'
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { getDate, getStatusText } from '../../utils'
 import { getOrderByNumber } from '../../utils/burger-api'
+import {
+  selectAllOrders,
+  selectUsersOrders,
+  selectIngredient
+} from '../../services/selectors'
 
 type TIngredientsWithCount =
   | (TIngredientBun & {
@@ -28,33 +33,45 @@ type TProps = {
   readonly isModal?: boolean
 }
 
-type TState =
-  | (TOrder & {
-      owner?: string
-      count?: number
-    })
-  | null
+type TState = (TOrder & { count?: number }) | null
 
 export default function OrderInfo({ isModal = false }: TProps) {
+  const location = useLocation()
   const params = useParams()
-  const orders = useSelector(state => state.websocket.data?.orders)
-  const allIngredients = useSelector(
-    state => state.burgerIngredients.ingredients
-  )
+  const allOrders = useSelector(selectAllOrders)
+  const usersOrders = useSelector(selectUsersOrders)
+  const allIngredients = useSelector(selectIngredient)
+
+  const profileMatchPath = useMatch({
+    path: '/profile',
+    end: false
+  })
   const [state, setState] = useState<TState>(null)
 
   useEffect(() => {
     if (!state) {
-      if (orders) {
-        let order = orders.find(item => item.number === Number(params.id))
-        order && setState(order)
+      switch (Boolean(profileMatchPath)) {
+        case true: {
+          const order =
+            usersOrders &&
+            usersOrders.find(item => item.number === Number(params.id))
+          order && setState(order)
+          break
+        }
+        case false: {
+          const order =
+            allOrders &&
+            allOrders.find(item => item.number === Number(params.id))
+          order && setState(order)
+          break
+        }
       }
-      if (params.id && !orders)
+      if (params.id && !location.state)
         getOrderByNumber(params.id).then(res => {
           setState(res.orders[0])
         })
     }
-  }, [])
+  }, [location, params])
 
   if (state) {
     const ingredients = state.ingredients.map(id => {

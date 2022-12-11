@@ -1,8 +1,8 @@
 import React from 'react'
 import { Navigate, useLocation, Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import ScaleLoader from 'react-spinners/ScaleLoader'
 import { selectUser, selectIsUserAuthChecked } from '../services/selectors'
+import { useSelector } from '../hooks'
 
 type TProps = {
   onlyAuth: boolean

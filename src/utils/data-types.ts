@@ -43,11 +43,8 @@ export type TOrder = {
   readonly createdAt: string
   readonly updatedAt: string
   readonly number: number
-}
-
-export type TOrderWithOwnerAndPrice = TOrder & {
-  readonly owner: TOwner
-  readonly price: number
+  readonly owner?: TOwner | string
+  readonly price?: number
 }
 
 export type TWSResponse = {
