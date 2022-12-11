@@ -1,47 +1,48 @@
 import {
-  TStore,
   TOrder,
   TIngredientBun,
   TIngredientMain,
   TIngredientSauce,
   TUser
-} from '../utils/types'
+} from '../utils/data-types'
+import { RootState } from './types'
 
-export const selectOrder = (state: TStore): Readonly<TOrder | null> =>
+export const selectOrder = (state: RootState): Readonly<TOrder | null> =>
   state.orderDetails.order
 
-export const selectOrderRequest = (state: TStore): boolean | null =>
+export const selectOrderRequest = (state: RootState): boolean | null =>
   state.orderDetails.orderRequest
 
-export const selectUserName = (state: TStore): Readonly<string | undefined> =>
-  state.auth.user?.name
+export const selectUserName = (
+  state: RootState
+): Readonly<string | undefined> => state.auth.user?.name
 
-export const selectUser = (state: TStore): Readonly<TUser | null> =>
+export const selectUser = (state: RootState): Readonly<TUser | null> =>
   state.auth.user
 
-export const selectLogoutRequest = (state: TStore): boolean =>
+export const selectLogoutRequest = (state: RootState): boolean =>
   state.auth.logoutRequest
 
-export const selectLoginRequest = (state: TStore): boolean =>
+export const selectLoginRequest = (state: RootState): boolean =>
   state.auth.loginRequest
 
-export const selectRegisterRequest = (state: TStore): boolean =>
+export const selectRegisterRequest = (state: RootState): boolean =>
   state.auth.registerRequest
 
-export const selectIsUserAuthChecked = (state: TStore): boolean =>
+export const selectIsUserAuthChecked = (state: RootState): boolean =>
   state.auth.isUserAuthChecked
 
 export const selectConstructorBun = (
-  state: TStore
+  state: RootState
 ): Readonly<TIngredientBun | null> => state.burgerConstructor.bun
 
 export const selectConstructorFillings = (
-  state: TStore
+  state: RootState
 ): ReadonlyArray<TIngredientMain | TIngredientSauce | never> =>
   state.burgerConstructor.fillings
 
 export const selectBuns = (
-  state: TStore
+  state: RootState
 ): ReadonlyArray<TIngredientBun | never> =>
   state.burgerIngredients.ingredients.filter(
     (ingredient): ingredient is TIngredientBun =>
@@ -49,7 +50,7 @@ export const selectBuns = (
   )
 
 export const selectMains = (
-  state: TStore
+  state: RootState
 ): ReadonlyArray<TIngredientMain | never> =>
   state.burgerIngredients.ingredients.filter(
     (ingredient): ingredient is TIngredientMain =>
@@ -57,12 +58,12 @@ export const selectMains = (
   )
 
 export const selectSauces = (
-  state: TStore
+  state: RootState
 ): ReadonlyArray<TIngredientSauce | never> =>
   state.burgerIngredients.ingredients.filter(
     (ingredient): ingredient is TIngredientSauce =>
       (ingredient as TIngredientSauce).type === 'sauce'
   )
 
-export const selectIngredient = (state: TStore) =>
+export const selectIngredient = (state: RootState) =>
   state.burgerIngredients.ingredients

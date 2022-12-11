@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import IngredientsSection from '../ingredients-section/ingredients-section'
 import style from './burger-ingredients.module.css'
-import { useSelector } from 'react-redux'
+import { useSelector } from '../../hooks'
 import {
   selectBuns,
   selectMains,

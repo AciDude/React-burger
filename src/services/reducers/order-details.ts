@@ -2,16 +2,27 @@ import {
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
   GET_ORDER_FAILED,
-  CLEAR_ORDER
+  CLEAR_ORDER,
+  TOrderDetailsActions
 } from '../actions/order-details'
+import { TOrder } from '../../utils/data-types'
 
-const initialState = {
+export type TOrderDetailsState = {
+  readonly order: TOrder | null
+  readonly orderRequest: boolean
+  readonly orderFailed: boolean
+}
+
+const initialState: TOrderDetailsState = {
   order: null,
   orderRequest: false,
   orderFailed: false
 }
 
-export const orderDetailsReducer = (state = initialState, action) => {
+export const orderDetailsReducer = (
+  state = initialState,
+  action: TOrderDetailsActions
+): TOrderDetailsState => {
   switch (action.type) {
     case GET_ORDER_REQUEST: {
       return {

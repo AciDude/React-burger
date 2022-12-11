@@ -8,10 +8,14 @@ import { useDrag } from 'react-dnd'
 import { useLocation, useNavigate } from 'react-router-dom'
 import LoadedImage from '../UI/loaded-image/loaded-image'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { TIngredient } from '../../utils/types'
+import {
+  TIngredientBun,
+  TIngredientMain,
+  TIngredientSauce
+} from '../../utils/data-types'
 
 type TProps = {
-  ingredient: Readonly<TIngredient>
+  ingredient: Readonly<TIngredientBun | TIngredientMain | TIngredientSauce>
   count?: number
 }
 

@@ -1,7 +1,6 @@
-export type TIngredient = {
+type TIngredient = {
   readonly _id: string
   readonly name: string
-  readonly type: 'bun' | 'main' | 'sauce'
   readonly proteins: number
   readonly fat: number
   readonly carbohydrates: number
@@ -13,16 +12,16 @@ export type TIngredient = {
   readonly __v: number
 }
 
-export type TIngredientBun = Omit<TIngredient, 'type'> & {
+export type TIngredientBun = TIngredient & {
   readonly type: 'bun'
 }
-export type TIngredientMain = Omit<TIngredient, 'type'> & {
+export type TIngredientMain = TIngredient & {
   readonly type: 'main'
-  readonly dragId: string
+  readonly dragId?: string
 }
-export type TIngredientSauce = Omit<TIngredient, 'type'> & {
+export type TIngredientSauce = TIngredient & {
   readonly type: 'sauce'
-  readonly dragId: string
+  readonly dragId?: string
 }
 
 export type TIngredients = ReadonlyArray<
@@ -37,73 +36,30 @@ export type TOwner = {
 }
 
 export type TOrder = {
-  readonly ingredients: TIngredients
+  readonly ingredients: ReadonlyArray<string>
   readonly _id: string
-  readonly owner: TOwner
   readonly status: string
   readonly name: string
   readonly createdAt: string
   readonly updatedAt: string
   readonly number: number
+}
+
+export type TOrderWithOwnerAndPrice = TOrder & {
+  readonly owner: TOwner
   readonly price: number
 }
 
-export type TOrderDetails = {
-  order: Readonly<TOrder | null>
-  orderRequest: boolean
-  orderFailed: boolean
-}
-
-export type TBurgerIngredients = {
-  ingredients: TIngredients
-  ingredientsRequest: boolean
-  ingredientsFailed: boolean
-}
-
-export type TBurgerConstructor = {
-  bun: Readonly<TIngredientBun | null>
-  fillings: ReadonlyArray<TIngredientMain | TIngredientSauce | never>
+export type TWSResponse = {
+  readonly success: boolean
+  readonly orders: ReadonlyArray<TOrder>
+  readonly total: number
+  readonly totalToday: number
 }
 
 export type TUser = {
   readonly email: string
   readonly name: string
-}
-
-export type TErrorRequest = {
-  [name: string]: string | number | boolean
-}
-
-export type TAuth = {
-  user: Readonly<TUser | null>
-  loginRequest: boolean
-  loginFailed: boolean
-  loginError: TErrorRequest
-
-  registerRequest: boolean
-  registerFailed: boolean
-  registerError: TErrorRequest
-
-  getUserRequest: boolean
-  getUserFailed: boolean
-  getUserError: TErrorRequest
-
-  patchUserRequest: boolean
-  patchUserFailed: boolean
-  patchUserError: TErrorRequest
-
-  logoutRequest: boolean
-  logoutFailed: boolean
-  logoutError: TErrorRequest
-
-  isUserAuthChecked: boolean
-}
-
-export type TStore = {
-  burgerIngredients: TBurgerIngredients
-  burgerConstructor: TBurgerConstructor
-  orderDetails: TOrderDetails
-  auth: TAuth
 }
 
 export type TLogin = {
@@ -128,9 +84,7 @@ export type TPasswordChange = {
   readonly password: string
 }
 
-export type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
-  [key in TDataKey]: TDataType
-} & {
+export type TResponseBody<TExtraResponseBody = {}> = TExtraResponseBody & {
   readonly success: boolean
   readonly message?: string
   readonly headers?: Headers
@@ -149,4 +103,9 @@ export interface CustomResponse<T> extends CustomBody<T> {
   readonly type: ResponseType
   readonly url: string
   clone(): Response
+}
+
+export type TTokens = {
+  readonly accessToken: string
+  readonly refreshToken: string
 }

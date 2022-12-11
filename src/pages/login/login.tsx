@@ -7,7 +7,7 @@ import {
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './login.module.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from '../../hooks'
 import { loginUser } from '../../services/actions/auth'
 import { selectLoginRequest } from '../../services/selectors'
 
@@ -23,7 +23,7 @@ export default function Login() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch<any>(loginUser(values))
+    dispatch(loginUser(values))
   }
 
   return (

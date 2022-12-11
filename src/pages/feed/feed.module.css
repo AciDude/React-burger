@@ -1,0 +1,13 @@
+.container {
+  width: 100%;
+}
+.content {
+  display: flex;
+  gap: 60px;
+}
+.list {
+  flex: 0 0 608px;
+}
+.details {
+  flex: 1 0 auto;
+}

@@ -4,13 +4,13 @@ import style from './app.module.css'
 import BurgerIngredients from '../burger-ingredients/burger-ingredients'
 import BurgerConstructor from '../burger-constructor/burger-constructor'
 import Modal from '../UI/modal/modal'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from '../../hooks'
 import { getIngredients } from '../../services/actions/burger-ingredients'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import IngredientDetails from '../ingredient-details/ingredient-details'
 import OrderDetails from '../order-details/order-details'
-import { CLEAR_ORDER } from '../../services/actions/order-details'
+import { clearOrder } from '../../services/actions/order-details'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import Login from '../../pages/login/login'
 import Register from '../../pages/register/register'
@@ -19,9 +19,12 @@ import ResetPassword from '../../pages/reset-password/reset-password'
 import Profile from '../../pages/profile/profile'
 import ProtectedRoutes from '../../hocs/protected-routes'
 import NotFound404 from '../../pages/not-found-404/not-found-404'
-import { checkUserAuth } from '../../services/actions/auth'
+import { checkAuth } from '../../services/actions/auth'
 import Person from '../../pages/person/person'
 import { selectOrder } from '../../services/selectors'
+import Feed from '../../pages/feed/feed'
+import OrderInfo from '../order-info/order-info'
+import OrdersList from '../orders-list/orders-list'
 
 function App() {
   const location = useLocation()
@@ -32,12 +35,12 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch<any>(getIngredients())
-    dispatch<any>(checkUserAuth())
+    dispatch(getIngredients())
+    dispatch(checkAuth())
   }, [dispatch])
 
   const closeModal = () => {
-    order && dispatch({ type: CLEAR_ORDER })
+    order && dispatch(clearOrder())
     navigate(-1)
   }
 
@@ -61,6 +64,8 @@ function App() {
           <Route path="/login" element={<ProtectedRoutes onlyAuth={false} />}>
             <Route index element={<Login />} />
           </Route>
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/:id" element={<OrderInfo />} />
           <Route
             path="/register"
             element={<ProtectedRoutes onlyAuth={false} />}
@@ -85,6 +90,10 @@ function App() {
           >
             <Route path="*" element={<Profile />}>
               <Route index element={<Person />} />
+              <Route
+                path="orders"
+                element={<OrdersList statusShowed={true} />}
+              />
             </Route>
           </Route>
           <Route path="*" element={<NotFound404 />}></Route>
@@ -115,6 +124,14 @@ function App() {
               />
             )}
           </Route>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal closeModal={closeModal}>
+                <OrderInfo isModal={true} />
+              </Modal>
+            }
+          />
         </Routes>
       )}
     </>

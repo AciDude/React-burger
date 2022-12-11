@@ -5,7 +5,7 @@ import {
   PasswordInput,
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from '../../hooks'
 import { patchUser } from '../../services/actions/auth'
 import { selectUser } from '../../services/selectors'
 
@@ -97,7 +97,7 @@ export default function Person() {
       },
       {}
     )
-    dispatch<any>(patchUser(body))
+    dispatch(patchUser(body))
   }
 
   return (

@@ -1,0 +1,7 @@
+.container {
+  position: relative;
+  z-index: 10;
+}
+.icon:not(:first-child) {
+  margin-left: -16px;
+}

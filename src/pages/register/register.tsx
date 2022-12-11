@@ -8,7 +8,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './register.module.css'
 import { Link, useLocation } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from '../../hooks'
 import { registerUser } from '../../services/actions/auth'
 import { selectRegisterRequest } from '../../services/selectors'
 
@@ -25,7 +25,7 @@ export default function Register() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch<any>(registerUser(values))
+    dispatch(registerUser(values))
   }
 
   return (
