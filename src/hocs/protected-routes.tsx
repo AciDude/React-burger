@@ -5,16 +5,20 @@ import { selectUser, selectIsUserAuthChecked } from '../services/selectors'
 import { useSelector } from '../hooks'
 
 type TProps = {
-  onlyAuth: boolean
+  readonly onlyAuth: boolean
+  readonly usedPreloader?: boolean
 }
 
-export default function ProtectedRoutes({ onlyAuth }: TProps) {
+export default function ProtectedRoutes({
+  onlyAuth,
+  usedPreloader = true
+}: TProps) {
   const location = useLocation()
   const user = useSelector(selectUser)
   const isUserAuthChecked = useSelector(selectIsUserAuthChecked)
 
   if (!isUserAuthChecked)
-    return (
+    return usedPreloader ? (
       <ScaleLoader
         color="#9b42f537"
         height={100}
@@ -22,7 +26,7 @@ export default function ProtectedRoutes({ onlyAuth }: TProps) {
         radius={10}
         cssOverride={{ alignSelf: 'center' }}
       />
-    )
+    ) : null
 
   if (onlyAuth && !user)
     return (

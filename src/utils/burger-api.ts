@@ -67,12 +67,11 @@ export async function requestWithRefresh<T>(
       const refreshData = await refreshTokenApi()
       const accessToken = refreshData.accessToken.split('Bearer ')[1]
       const refreshToken = refreshData.refreshToken
+      ;(
+        options?.headers as Record<string, string>
+      ).Authorization = `Bearer ${accessToken}`
       saveTokens(refreshToken, accessToken)
-      ;(options?.headers as Headers).set(
-        'Authorization',
-        `Bearer ${accessToken}`
-      )
-      return request(url, options)
+      return await request(url, options)
     }
     deleteCookie('accessToken')
     localStorage.removeItem('refreshToken')

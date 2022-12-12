@@ -71,7 +71,7 @@ export default function OrderInfo({ isModal = false }: TProps) {
           setState(res.orders[0])
         })
     }
-  }, [location, params])
+  }, [location, params, usersOrders, allOrders])
 
   if (state) {
     const ingredients = state.ingredients.map(id => {

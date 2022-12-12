@@ -99,7 +99,7 @@ function App() {
           />
           <Route
             path="/modal-order"
-            element={<ProtectedRoutes onlyAuth={true} />}
+            element={<ProtectedRoutes onlyAuth={true} usedPreloader={false} />}
           >
             {order && (
               <Route
@@ -122,7 +122,7 @@ function App() {
           />
           <Route
             path="/profile/orders/:id"
-            element={<ProtectedRoutes onlyAuth={true} />}
+            element={<ProtectedRoutes onlyAuth={true} usedPreloader={false} />}
           >
             <Route
               index
