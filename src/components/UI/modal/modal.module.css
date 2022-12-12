@@ -6,6 +6,7 @@
     right: 0;
     bottom: 0;
     display: grid;
+    z-index: 100;
 }
 .content {
     place-self: center;

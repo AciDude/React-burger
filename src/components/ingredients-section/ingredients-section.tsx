@@ -1,7 +1,7 @@
 import React from 'react'
 import IngredientCard from '../ingredient-card/ingredient-card'
 import style from './ingredients-section.module.css'
-import { TIngredients } from '../../utils/types'
+import { TIngredients } from '../../utils/data-types'
 
 type TProps = {
   readonly title: string

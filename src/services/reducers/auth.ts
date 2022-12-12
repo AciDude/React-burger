@@ -16,41 +16,72 @@ import {
   LOGOUT_FAILED,
   CHECK_USER_AUTH
 } from '../actions/auth'
+import { TUser } from '../../utils/data-types'
+import { TAuthActions } from '../types/auth'
 
-const initialState = {
+export type TAuthState = {
+  readonly user: TUser | null
+
+  loginRequest: boolean
+  loginFailed: boolean
+  loginError: string | undefined
+
+  registerRequest: boolean
+  registerFailed: boolean
+  registerError: string | undefined
+
+  getUserRequest: boolean
+  getUserFailed: boolean
+  getUserError: string | undefined
+
+  patchUserRequest: boolean
+  patchUserFailed: boolean
+  patchUserError: string | undefined
+
+  logoutRequest: boolean
+  logoutFailed: boolean
+  logoutError: string | undefined
+
+  isUserAuthChecked: boolean
+}
+
+const initialState: TAuthState = {
   user: null,
 
   loginRequest: false,
   loginFailed: false,
-  loginError: null,
+  loginError: undefined,
 
   registerRequest: false,
   registerFailed: false,
-  registerError: null,
+  registerError: undefined,
 
   getUserRequest: false,
   getUserFailed: false,
-  getUserError: null,
+  getUserError: undefined,
 
   patchUserRequest: false,
   patchUserFailed: false,
-  patchUserError: null,
+  patchUserError: undefined,
 
   logoutRequest: false,
   logoutFailed: false,
-  logoutError: null,
+  logoutError: undefined,
 
   isUserAuthChecked: false
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (
+  state: TAuthState = initialState,
+  action: TAuthActions
+): TAuthState => {
   switch (action.type) {
     //LOGIN
     case LOGIN_REQUEST: {
       return {
         ...state,
         loginRequest: true,
-        loginError: null
+        loginError: undefined
       }
     }
     case LOGIN_SUCCESS: {
@@ -59,7 +90,7 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload,
         loginRequest: false,
         loginFailed: false,
-        loginError: null
+        loginError: undefined
       }
     }
     case LOGIN_FAILED: {
@@ -75,7 +106,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         registerRequest: true,
-        registerError: null
+        registerError: undefined
       }
     }
     case REGISTER_SUCCESS: {
@@ -84,7 +115,7 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload,
         registerRequest: false,
         registerFailed: false,
-        registerError: null
+        registerError: undefined
       }
     }
     case REGISTER_FAILED: {
@@ -100,7 +131,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         getUserRequest: true,
-        getUserError: null
+        getUserError: undefined
       }
     }
     case GET_USER_SUCCESS: {
@@ -109,7 +140,7 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload,
         getUserRequest: false,
         getUserFailed: false,
-        getUserError: null
+        getUserError: undefined
       }
     }
     case GET_USER_FAILED: {
@@ -117,7 +148,8 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         getUserRequest: false,
         getUserFailed: true,
-        getUserError: action.payload
+        getUserError: action.payload,
+        user: null
       }
     }
     //PATCH USER
@@ -125,7 +157,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         patchUserRequest: true,
-        patchUserError: null
+        patchUserError: undefined
       }
     }
     case PATCH_USER_SUCCESS: {
@@ -134,7 +166,7 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload,
         patchUserRequest: false,
         patchUserFailed: false,
-        patchUserError: null
+        patchUserError: undefined
       }
     }
     case PATCH_USER_FAILED: {
@@ -142,7 +174,8 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         patchUserRequest: false,
         patchUserFailed: true,
-        patchUserError: action.payload
+        patchUserError: action.payload,
+        user: null
       }
     }
     //LOGOUT
@@ -150,7 +183,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         logoutRequest: true,
-        logoutError: null
+        logoutError: undefined
       }
     }
     case LOGOUT_SUCCESS: {
@@ -159,7 +192,7 @@ export const userReducer = (state = initialState, action) => {
         user: null,
         logoutRequest: false,
         logoutFailed: false,
-        logoutError: null
+        logoutError: undefined
       }
     }
     case LOGOUT_FAILED: {
@@ -167,7 +200,8 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         logoutRequest: false,
         logoutFailed: true,
-        logoutError: action.payload
+        logoutError: action.payload,
+        user: null
       }
     }
     //CHECK AUTH

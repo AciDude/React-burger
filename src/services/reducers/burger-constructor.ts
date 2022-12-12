@@ -4,13 +4,27 @@ import {
   UPDATE_CONSTRUCTOR_LIST,
   CLEAR_CONSTRUCTOR_LIST
 } from '../actions/burger-constructor'
+import {
+  TIngredientBun,
+  TIngredientMain,
+  TIngredientSauce
+} from '../../utils/data-types'
+import { TBurgerConstructorActions } from '../types/burger-constructor'
 
-const initialState = {
+type TBurgerConstructorState = {
+  readonly bun: TIngredientBun | null
+  readonly fillings: ReadonlyArray<TIngredientMain | TIngredientSauce | never>
+}
+
+const initialState: TBurgerConstructorState = {
   bun: null,
   fillings: []
 }
 
-export const burgerConstructorReducer = (state = initialState, action) => {
+export const burgerConstructorReducer = (
+  state = initialState,
+  action: TBurgerConstructorActions
+): TBurgerConstructorState => {
   switch (action.type) {
     case ADD_INGREDIENT: {
       return action.ingredient.type === 'bun'

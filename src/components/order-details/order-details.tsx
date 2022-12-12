@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './order-details.module.css'
 import image from '../../image/done.png'
-import { useSelector } from 'react-redux'
+import { useSelector } from '../../hooks'
 import { selectOrder } from '../../services/selectors'
 
 export default function OrderDetails() {

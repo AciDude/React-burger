@@ -1,18 +1,21 @@
 .container {
   display: flex;
   width: 100%;
-  margin-top: 120px;
   gap: 60px;
 }
 .menu {
+  margin-top: 120px;
   flex: 0 0 320px;
+}
+.list {
+  margin-top: 40px;
+}
+.form {
+  margin-top: 120px;
 }
 .list {
   display: flex;
   flex-direction: column;
-}
-.content {
-  flex: 1 0 max-content;
 }
 .button {
   border: none;

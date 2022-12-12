@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import {
-  DELETE_INGREDIENT,
-  UPDATE_CONSTRUCTOR_LIST
+  deleteIngredient,
+  updateConstructorList
 } from '../../services/actions/burger-constructor'
-import { useDispatch } from 'react-redux'
+import { useDispatch } from '../../hooks'
 import BurgerConstructorElement from '../burger-constructor-element/burger-constructor-element'
 import style from './burger-constructor-list.module.css'
-import { TIngredientMain, TIngredientSauce } from '../../utils/types'
+import { TIngredientMain, TIngredientSauce } from '../../utils/data-types'
 
 type TProps = {
   fillings: ReadonlyArray<TIngredientMain | TIngredientSauce | never>
@@ -21,16 +21,13 @@ export default function BurgerConstructorList({ fillings }: TProps) {
       newCards.splice(dragIndex, 1)
       newCards.splice(hoverIndex, 0, dragCard)
 
-      dispatch({
-        type: UPDATE_CONSTRUCTOR_LIST,
-        fillings: newCards
-      })
+      dispatch(updateConstructorList(newCards))
     },
     [fillings, dispatch]
   )
   const onClickIngredient = useCallback(
     (id: string): void => {
-      dispatch({ type: DELETE_INGREDIENT, id })
+      dispatch(deleteIngredient(id))
     },
     [dispatch]
   )

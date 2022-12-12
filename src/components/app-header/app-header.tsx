@@ -6,8 +6,8 @@ import {
   BurgerIcon,
   ListIcon
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { NavLink, useMatch } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { NavLink, useMatch, Link } from 'react-router-dom'
+import { useSelector } from '../../hooks'
 import { selectUserName } from '../../services/selectors'
 
 const AppHeader = React.memo(function () {
@@ -17,7 +17,7 @@ const AppHeader = React.memo(function () {
     end: true
   })
   const ordersMatchPath = useMatch({
-    path: '/orders',
+    path: '/feed',
     end: false
   })
   const profileMatchPath = useMatch({
@@ -25,7 +25,8 @@ const AppHeader = React.memo(function () {
     end: false
   })
 
-  const setType = (obj: object | null): 'primary' | 'secondary' => (obj ? 'primary' : 'secondary')
+  const setType = (obj: object | null): 'primary' | 'secondary' =>
+    obj ? 'primary' : 'secondary'
 
   const classesArray = [
     'pl-5',
@@ -40,7 +41,7 @@ const AppHeader = React.memo(function () {
   ]
   const classes = classesArray.join(' ')
 
-  const setActive = ({ isActive }: {isActive: boolean}): string | undefined =>
+  const setActive = ({ isActive }: { isActive: boolean }): string | undefined =>
     isActive ? `${classes} ${style.active}` : `${classes} ${style.inactive}`
 
   return (
@@ -55,7 +56,7 @@ const AppHeader = React.memo(function () {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/orders" className={setActive}>
+              <NavLink to="/feed" className={setActive}>
                 <ListIcon type={setType(ordersMatchPath)} />
                 <span className="ml-2">Лента заказов</span>
               </NavLink>
@@ -66,10 +67,13 @@ const AppHeader = React.memo(function () {
           <Logo />
         </div>
         <div className={style.profile}>
-          <NavLink to="/profile" className={setActive}>
+          <Link
+            to="/profile/orders"
+            className={setActive({ isActive: Boolean(profileMatchPath) })}
+          >
             <ProfileIcon type={setType(profileMatchPath)} />
             <span className="ml-2">{name || 'Личный кабинет'}</span>
-          </NavLink>
+          </Link>
         </div>
       </div>
     </header>

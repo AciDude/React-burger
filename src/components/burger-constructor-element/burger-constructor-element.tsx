@@ -5,7 +5,7 @@ import {
   ConstructorElement,
   DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components'
-import { TIngredientMain, TIngredientSauce } from '../../utils/types'
+import { TIngredientMain, TIngredientSauce } from '../../utils/data-types'
 
 type TProps = {
   ingredient: Readonly<TIngredientMain | TIngredientSauce>
@@ -88,7 +88,9 @@ export default function BurgerConstructorElement({
         text={`${ingredient.name}`}
         price={ingredient.price}
         thumbnail={ingredient.image_mobile}
-        handleClose={() => onClickIngredient(ingredient.dragId)}
+        handleClose={() =>
+          ingredient.dragId && onClickIngredient(ingredient.dragId)
+        }
       />
     </li>
   )

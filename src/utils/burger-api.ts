@@ -1,4 +1,4 @@
-import { saveTokens, getCookie } from './cookies'
+import { saveTokens, getCookie, deleteCookie } from './cookies'
 import {
   TIngredients,
   TLogin,
@@ -7,10 +7,14 @@ import {
   TPasswordReset,
   TPasswordChange,
   CustomResponse,
-  TResponseBody
-} from './types'
+  TResponseBody,
+  TUser,
+  TTokens,
+  TOrder
+} from './data-types'
 
-const BASE_URL = 'https://norma.nomoreparties.space/api/'
+export const BASE_WS_URL = 'wss://norma.nomoreparties.space/'
+export const BASE_URL = 'https://norma.nomoreparties.space/api/'
 const defaultHeaders: HeadersInit = {
   'Content-Type': 'application/json;charset=utf-8'
 }
@@ -34,17 +38,17 @@ const checkResponse = <T>(response: CustomResponse<T>) => {
   return response.json()
 }
 
-export function request<TKey extends string = '', TValues = {}>(
+export function request<T>(
   url: RequestInfo | URL,
   options?: RequestInit | undefined
 ) {
   return fetch(url, options)
-    .then<TResponseBody<TKey, TValues>>(checkResponse)
+    .then<TResponseBody<T>>(checkResponse)
     .then(res => (res?.success ? res : Promise.reject(res)))
 }
 
 export function refreshTokenApi() {
-  return request<'accessToken' | 'refreshToken', string>(
+  return request<TTokens>(
     `${BASE_URL}auth/token`,
     setOptions('POST', defaultHeaders, {
       token: localStorage.getItem('refreshToken')
@@ -52,37 +56,38 @@ export function refreshTokenApi() {
   )
 }
 
-export async function requestWithRefresh<
-  TKey extends string = '',
-  TValues = {}
->(
+export async function requestWithRefresh<T>(
   url: RequestInfo | URL,
-  options: RequestInit | undefined
-): Promise<TResponseBody<TKey, TValues>> {
+  options?: RequestInit
+): Promise<TResponseBody<T>> {
   try {
     return await request(url, options)
   } catch (err) {
-    if (err instanceof Error && err.message === 'jwt expired') {
+    if ((err as TResponseBody)?.message === 'jwt expired') {
       const refreshData = await refreshTokenApi()
       const accessToken = refreshData.accessToken.split('Bearer ')[1]
       const refreshToken = refreshData.refreshToken
+      ;(
+        options?.headers as Record<string, string>
+      ).Authorization = `Bearer ${accessToken}`
       saveTokens(refreshToken, accessToken)
-      ;(options?.headers as Headers).set(
-        'Authorization',
-        `Bearer ${accessToken}`
-      )
-      return request(url, options)
+      return await request(url, options)
     }
+    deleteCookie('accessToken')
+    localStorage.removeItem('refreshToken')
     return Promise.reject(err)
   }
 }
 
 export function getIngredientsAPI() {
-  return request<'data', TIngredients>(`${BASE_URL}ingredients`)
+  return request<{ readonly data: TIngredients }>(`${BASE_URL}ingredients`)
 }
 
-export function getOrderAPI(body: { ingredients: TIngredients }) {
-  return requestWithRefresh(
+export function getOrderAPI(body: { ingredients: string[] }) {
+  return requestWithRefresh<{
+    readonly name: string
+    readonly order: TOrder
+  }>(
     `${BASE_URL}orders`,
     setOptions(
       'POST',
@@ -96,21 +101,21 @@ export function getOrderAPI(body: { ingredients: TIngredients }) {
 }
 
 export function loginAPI(body: TLogin) {
-  return request<
-    'accessToken' | 'refreshToken' | 'user',
-    string | { [name: string]: string }
-  >(`${BASE_URL}auth/login`, setOptions('POST', defaultHeaders, body))
+  return request<TTokens & { readonly user: TUser }>(
+    `${BASE_URL}auth/login`,
+    setOptions('POST', defaultHeaders, body)
+  )
 }
 
 export function registerAPI(body: TRegister) {
-  return request<
-    'accessToken' | 'refreshToken' | 'user',
-    string | { [name: string]: string }
-  >(`${BASE_URL}auth/register`, setOptions('POST', defaultHeaders, body))
+  return request<TTokens & { readonly user: TUser }>(
+    `${BASE_URL}auth/register`,
+    setOptions('POST', defaultHeaders, body)
+  )
 }
 
 export function getUserAPI() {
-  return requestWithRefresh(
+  return requestWithRefresh<{ readonly user: TUser }>(
     `${BASE_URL}auth/user`,
     setOptions('GET', {
       ...defaultHeaders,
@@ -120,7 +125,7 @@ export function getUserAPI() {
 }
 
 export function patchUserAPI(body: TPatch) {
-  return requestWithRefresh(
+  return requestWithRefresh<{ readonly user: TUser }>(
     `${BASE_URL}auth/user`,
     setOptions(
       'PATCH',
@@ -154,4 +159,10 @@ export function passwordChangeAPI(body: TPasswordChange) {
     `${BASE_URL}password-reset/reset`,
     setOptions('POST', defaultHeaders, body)
   )
+}
+
+export function getOrderByNumber(string: string) {
+  return request<{
+    readonly orders: ReadonlyArray<TOrder>
+  }>(`${BASE_URL}orders/${string}`)
 }

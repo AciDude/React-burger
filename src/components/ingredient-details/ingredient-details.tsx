@@ -1,6 +1,6 @@
 import React from 'react'
 import style from './ingredient-details.module.css'
-import { useSelector } from 'react-redux'
+import { useSelector } from '../../hooks'
 import { useParams } from 'react-router-dom'
 import LoadedImage from '../UI/loaded-image/loaded-image'
 import ClipLoader from 'react-spinners/ClipLoader'

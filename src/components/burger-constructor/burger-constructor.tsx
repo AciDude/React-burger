@@ -5,19 +5,19 @@ import {
   Button
 } from '@ya.praktikum/react-developer-burger-ui-components'
 import style from './burger-constructor.module.css'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from '../../hooks'
 import { getOrder } from '../../services/actions/order-details'
 import { useDrop } from 'react-dnd'
 import { v4 as uuid } from 'uuid'
-import { ADD_INGREDIENT } from '../../services/actions/burger-constructor'
+import { addIngredient } from '../../services/actions/burger-constructor'
 import BurgerConstructorList from '../burger-constructor-list/burger-constructor-list'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import MoonLoader from 'react-spinners/MoonLoader'
 import {
-  TIngredient,
+  TIngredientBun,
   TIngredientMain,
   TIngredientSauce
-} from '../../utils/types'
+} from '../../utils/data-types'
 import {
   selectConstructorBun,
   selectConstructorFillings,
@@ -53,14 +53,16 @@ const BurgerConstructor = function () {
   }, [bun, fillings])
 
   const onClickOrder = () => {
-    dispatch<any>(getOrder(bun, fillings))
-    navigate('/modal-order', {
-      state: { background: location }
-    })
+    if (bun) {
+      dispatch(getOrder(bun, fillings))
+      navigate('/modal-order', {
+        state: { background: location }
+      })
+    }
   }
 
   const [, dropTargetRef] = useDrop<
-    Readonly<TIngredient>,
+    Readonly<TIngredientBun | TIngredientMain | TIngredientSauce>,
     unknown,
     { isHover: boolean }
   >({
@@ -69,20 +71,13 @@ const BurgerConstructor = function () {
       isHover: monitor.isOver()
     }),
     drop(ingredient) {
-      const action =
-        ingredient.type === 'bun'
-          ? {
-              type: ADD_INGREDIENT,
-              ingredient
-            }
-          : {
-              type: ADD_INGREDIENT,
-              ingredient: {
-                ...ingredient,
-                dragId: uuid()
-              }
-            }
-      dispatch(action)
+      dispatch(
+        addIngredient(
+          ingredient.type === 'bun'
+            ? ingredient
+            : { ...ingredient, dragId: uuid() }
+        )
+      )
     }
   })
 
