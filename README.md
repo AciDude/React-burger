@@ -1,1 +1,1 @@
-## [React-burger](https://acidude.github.io/react-burger/feed)
+## [React-burger](https://acidude.github.io/react-burger)
