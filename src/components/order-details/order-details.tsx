@@ -9,7 +9,10 @@ export default function OrderDetails() {
   return (
     order && (
       <div className={`${style.block} mt-30 mb-30 ml-25 mr-25`}>
-        <p className={`${style.number} text text_type_digits-large mb-8`}>
+        <p
+          className={`${style.number} text text_type_digits-large mb-8`}
+          data-testid="order-details-number"
+        >
           {order.number}
         </p>
         <p className="text text_type_main-medium mb-15">идентификатор заказа</p>

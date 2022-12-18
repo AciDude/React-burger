@@ -18,7 +18,10 @@ export default function IngredientDetails({ title = '' }: TProp) {
   )
   if (!currentIngredient) return null
   return (
-    <div className={`${style.block} ml-10 mr-10 mb-15`}>
+    <div
+      className={`${style.block} ml-10 mr-10 mb-15`}
+      data-testid="ingredient-details"
+    >
       {title && <p className="text text_type_main-large mt-30">{title}</p>}
       <div className={`${style.image} mb-4`}>
         <LoadedImage
@@ -27,7 +30,10 @@ export default function IngredientDetails({ title = '' }: TProp) {
           preloader={<ClipLoader color="#f04ab9" size="100px" />}
         />
       </div>
-      <p className="text text_type_main-medium mb-8">
+      <p
+        className="text text_type_main-medium mb-8"
+        data-testid="ingredient-details-name"
+      >
         {currentIngredient.name}
       </p>
       <ul className={`${style.list} text text_color_inactive`}>

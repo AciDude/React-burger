@@ -111,10 +111,13 @@ export const loginUser =
   (body: TLogin): AppThunk =>
   dispatch => {
     dispatch(loginRequest())
-    loginAPI(body)
+    console.log(1)
+    return loginAPI(body)
       .then(res => {
+        console.log(2)
         const accessToken = res.accessToken.split('Bearer ')[1]
         const refreshToken = res.refreshToken
+        console.log(3)
         saveTokens(refreshToken, accessToken)
         dispatch(loginSuccess(res.user))
       })
@@ -125,7 +128,7 @@ export const registerUser =
   (body: TRegister): AppThunk =>
   dispatch => {
     dispatch(registerRequest())
-    registerAPI(body)
+    return registerAPI(body)
       .then(res => {
         const accessToken = res.accessToken.split('Bearer ')[1]
         const refreshToken = res.refreshToken
@@ -137,7 +140,7 @@ export const registerUser =
 
 export const getUser = (): AppThunk => (dispatch, getState) => {
   dispatch(getUserRequest())
-  getUserAPI()
+  return getUserAPI()
     .then(res => {
       dispatch(getUserSuccess(res.user))
     })
@@ -151,7 +154,7 @@ export const patchUser =
   (body: TPatch): AppThunk =>
   dispatch => {
     dispatch(patchUserRequest())
-    patchUserAPI(body)
+    return patchUserAPI(body)
       .then(res => {
         dispatch(patchUserSuccess(res.user))
       })
@@ -160,7 +163,7 @@ export const patchUser =
 
 export const logoutUser = (): AppThunk => dispatch => {
   dispatch(logoutRequest())
-  logoutAPI()
+  return logoutAPI()
     .then(res => {
       deleteCookie('accessToken')
       localStorage.removeItem('refreshToken')

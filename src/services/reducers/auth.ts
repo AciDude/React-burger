@@ -22,27 +22,27 @@ import { TAuthActions } from '../types/auth'
 export type TAuthState = {
   readonly user: TUser | null
 
-  loginRequest: boolean
-  loginFailed: boolean
-  loginError: string | undefined
+  readonly loginRequest: boolean
+  readonly loginFailed: boolean
+  readonly loginError: string
 
-  registerRequest: boolean
-  registerFailed: boolean
-  registerError: string | undefined
+  readonly registerRequest: boolean
+  readonly registerFailed: boolean
+  readonly registerError: string
 
-  getUserRequest: boolean
-  getUserFailed: boolean
-  getUserError: string | undefined
+  readonly getUserRequest: boolean
+  readonly getUserFailed: boolean
+  readonly getUserError: string
 
-  patchUserRequest: boolean
-  patchUserFailed: boolean
-  patchUserError: string | undefined
+  readonly patchUserRequest: boolean
+  readonly patchUserFailed: boolean
+  readonly patchUserError: string
 
-  logoutRequest: boolean
-  logoutFailed: boolean
-  logoutError: string | undefined
+  readonly logoutRequest: boolean
+  readonly logoutFailed: boolean
+  readonly logoutError: string
 
-  isUserAuthChecked: boolean
+  readonly isUserAuthChecked: boolean
 }
 
 const initialState: TAuthState = {
@@ -50,23 +50,23 @@ const initialState: TAuthState = {
 
   loginRequest: false,
   loginFailed: false,
-  loginError: undefined,
+  loginError: '',
 
   registerRequest: false,
   registerFailed: false,
-  registerError: undefined,
+  registerError: '',
 
   getUserRequest: false,
   getUserFailed: false,
-  getUserError: undefined,
+  getUserError: '',
 
   patchUserRequest: false,
   patchUserFailed: false,
-  patchUserError: undefined,
+  patchUserError: '',
 
   logoutRequest: false,
   logoutFailed: false,
-  logoutError: undefined,
+  logoutError: '',
 
   isUserAuthChecked: false
 }
@@ -81,7 +81,7 @@ export const userReducer = (
       return {
         ...state,
         loginRequest: true,
-        loginError: undefined
+        loginError: ''
       }
     }
     case LOGIN_SUCCESS: {
@@ -90,7 +90,7 @@ export const userReducer = (
         user: action.payload,
         loginRequest: false,
         loginFailed: false,
-        loginError: undefined
+        loginError: ''
       }
     }
     case LOGIN_FAILED: {
@@ -106,7 +106,7 @@ export const userReducer = (
       return {
         ...state,
         registerRequest: true,
-        registerError: undefined
+        registerError: ''
       }
     }
     case REGISTER_SUCCESS: {
@@ -115,7 +115,7 @@ export const userReducer = (
         user: action.payload,
         registerRequest: false,
         registerFailed: false,
-        registerError: undefined
+        registerError: ''
       }
     }
     case REGISTER_FAILED: {
@@ -131,7 +131,7 @@ export const userReducer = (
       return {
         ...state,
         getUserRequest: true,
-        getUserError: undefined
+        getUserError: ''
       }
     }
     case GET_USER_SUCCESS: {
@@ -140,7 +140,7 @@ export const userReducer = (
         user: action.payload,
         getUserRequest: false,
         getUserFailed: false,
-        getUserError: undefined
+        getUserError: ''
       }
     }
     case GET_USER_FAILED: {
@@ -157,7 +157,7 @@ export const userReducer = (
       return {
         ...state,
         patchUserRequest: true,
-        patchUserError: undefined
+        patchUserError: ''
       }
     }
     case PATCH_USER_SUCCESS: {
@@ -166,7 +166,7 @@ export const userReducer = (
         user: action.payload,
         patchUserRequest: false,
         patchUserFailed: false,
-        patchUserError: undefined
+        patchUserError: ''
       }
     }
     case PATCH_USER_FAILED: {
@@ -183,7 +183,7 @@ export const userReducer = (
       return {
         ...state,
         logoutRequest: true,
-        logoutError: undefined
+        logoutError: ''
       }
     }
     case LOGOUT_SUCCESS: {
@@ -192,7 +192,7 @@ export const userReducer = (
         user: null,
         logoutRequest: false,
         logoutFailed: false,
-        logoutError: undefined
+        logoutError: ''
       }
     }
     case LOGOUT_FAILED: {

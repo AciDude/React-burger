@@ -11,7 +11,7 @@ import {
 } from '../../utils/data-types'
 import { TBurgerConstructorActions } from '../types/burger-constructor'
 
-type TBurgerConstructorState = {
+export type TBurgerConstructorState = {
   readonly bun: TIngredientBun | null
   readonly fillings: ReadonlyArray<TIngredientMain | TIngredientSauce | never>
 }

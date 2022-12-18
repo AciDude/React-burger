@@ -36,11 +36,11 @@ export default function IngredientCard({ ingredient, count = 0 }: TProps) {
     <Link
       to={`/ingredients/${ingredientId}`}
       state={{ background: location }}
-      key={ingredientId}
       ref={dragRef}
       type="button"
       className={style.card}
       style={{ opacity }}
+      data-testid={`ingredient-cart-${ingredientId}`}
     >
       <div className={`${style.image} ml-4 mr-4 mb-1`}>
         <LoadedImage

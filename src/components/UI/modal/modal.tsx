@@ -27,7 +27,7 @@ const Modal: FC<PropsWithChildren<Props>> = ({
   }, [closeModal])
 
   return ReactDOM.createPortal(
-    <div className={style.modal}>
+    <div className={style.modal} data-testid="modal">
       <div className={style.content}>
         {title && (
           <p
@@ -37,7 +37,12 @@ const Modal: FC<PropsWithChildren<Props>> = ({
           </p>
         )}
         {children}
-        <button type="button" onClick={closeModal} className={style.button}>
+        <button
+          type="button"
+          onClick={closeModal}
+          className={style.button}
+          data-testid="modal-close-button"
+        >
           <CloseIcon type="primary" />
         </button>
       </div>

@@ -6,7 +6,7 @@ import {
 import { TIngredients } from '../../utils/data-types'
 import { TBurgerIngredientsActions } from '../types/burger-ingredients'
 
-type TBurgerIngredientsState = {
+export type TBurgerIngredientsState = {
   readonly ingredients: TIngredients
   readonly ingredientsRequest: boolean
   readonly ingredientsFailed: boolean
