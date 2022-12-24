@@ -10,56 +10,24 @@ import {
   UPDATE_CONSTRUCTOR_LIST,
   CLEAR_CONSTRUCTOR_LIST
 } from '../../actions/burger-constructor'
+import { initialState } from '../burger-constructor'
+import { ingredientPlaceholder } from './constants'
 
-const initialState: TBurgerConstructorState = {
-  bun: null,
-  fillings: []
-}
 const state: TBurgerConstructorState = {
   bun: null,
   fillings: [
     {
-      _id: '_id',
-      name: 'name',
-      proteins: 0,
-      fat: 0,
-      carbohydrates: 0,
-      calories: 0,
-      price: 0,
-      image: 'image',
-      image_mobile: 'image_mobile',
-      image_large: 'image_large',
-      __v: 0,
+      ...ingredientPlaceholder,
       type: 'main',
       dragId: '1'
     },
     {
-      _id: '_id',
-      name: 'name',
-      proteins: 0,
-      fat: 0,
-      carbohydrates: 0,
-      calories: 0,
-      price: 0,
-      image: 'image',
-      image_mobile: 'image_mobile',
-      image_large: 'image_large',
-      __v: 0,
+      ...ingredientPlaceholder,
       type: 'main',
       dragId: '2'
     },
     {
-      _id: '_id',
-      name: 'name',
-      proteins: 0,
-      fat: 0,
-      carbohydrates: 0,
-      calories: 0,
-      price: 0,
-      image: 'image',
-      image_mobile: 'image_mobile',
-      image_large: 'image_large',
-      __v: 0,
+      ...ingredientPlaceholder,
       type: 'main',
       dragId: '3'
     }
@@ -75,17 +43,7 @@ describe('Redux burger constructor store', () => {
 
   test('Should return state with bun', () => {
     const ingredient: TIngredientBun = {
-      _id: '_id',
-      name: 'name',
-      proteins: 0,
-      fat: 0,
-      carbohydrates: 0,
-      calories: 0,
-      price: 0,
-      image: 'image',
-      image_mobile: 'image_mobile',
-      image_large: 'image_large',
-      __v: 0,
+      ...ingredientPlaceholder,
       type: 'bun'
     }
     expect(
@@ -101,17 +59,7 @@ describe('Redux burger constructor store', () => {
 
   test('Should return state with fillings', () => {
     const ingredient: TIngredientMain = {
-      _id: '_id',
-      name: 'name',
-      proteins: 0,
-      fat: 0,
-      carbohydrates: 0,
-      calories: 0,
-      price: 0,
-      image: 'image',
-      image_mobile: 'image_mobile',
-      image_large: 'image_large',
-      __v: 0,
+      ...ingredientPlaceholder,
       type: 'main'
     }
     expect(

@@ -1,4 +1,4 @@
-import { wsAllOrdersReducer, TWsState } from '../ws-all-orders'
+import { wsAllOrdersReducer } from '../ws-all-orders'
 import {
   WS_CONNECTION_START_ALL_ORDERS,
   WS_CONNECTION_SUCCESS_ALL_ORDERS,
@@ -7,13 +7,7 @@ import {
   WS_GET_MESSAGE_ALL_ORDERS
 } from '../../actions/ws-all-orders'
 import { TWsAllOrdersActions } from '../../types/ws-all-orders'
-
-const initialState: TWsState = {
-  data: null,
-  wsConnecting: false,
-  wsConnectingFailed: false,
-  wsConnect: false
-}
+import { initialState } from '../ws-all-orders'
 
 describe('Redux WS all orders store', () => {
   test('Should return the initial state', () => {

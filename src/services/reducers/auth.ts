@@ -45,7 +45,7 @@ export type TAuthState = {
   readonly isUserAuthChecked: boolean
 }
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
   user: null,
 
   loginRequest: false,

@@ -1,4 +1,4 @@
-import { wsUserOrdersReducer, TWsState } from '../ws-users-orders'
+import { wsUserOrdersReducer } from '../ws-users-orders'
 import {
   WS_CONNECTION_START_USERS_ORDERS,
   WS_CONNECTION_SUCCESS_USERS_ORDERS,
@@ -7,13 +7,7 @@ import {
   WS_GET_MESSAGE_USERS_ORDERS
 } from '../../actions/ws-users-orders'
 import { TWsUsersOrdersActions } from '../../types/ws-users-orders'
-
-const initialState: TWsState = {
-  data: null,
-  wsConnecting: false,
-  wsConnectingFailed: false,
-  wsConnect: false
-}
+import { initialState } from '../ws-users-orders'
 
 describe('Redux WS users orders store', () => {
   test('Should return the initial state', () => {

@@ -1,4 +1,4 @@
-import { orderDetailsReducer, TOrderDetailsState } from '../order-details'
+import { orderDetailsReducer } from '../order-details'
 import {
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
@@ -6,12 +6,7 @@ import {
   CLEAR_ORDER
 } from '../../actions/order-details'
 import { TOrderDetailsActions } from '../../types/order-details'
-
-const initialState: TOrderDetailsState = {
-  order: null,
-  orderRequest: false,
-  orderFailed: false
-}
+import { initialState } from '../order-details'
 
 describe('Redux order details store', () => {
   test('Should return the initial state', () => {

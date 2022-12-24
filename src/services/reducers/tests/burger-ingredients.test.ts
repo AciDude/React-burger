@@ -1,7 +1,4 @@
-import {
-  burgerIngredientsReducer,
-  TBurgerIngredientsState
-} from '../burger-ingredients'
+import { burgerIngredientsReducer } from '../burger-ingredients'
 import { TBurgerIngredientsActions } from '../../types/burger-ingredients'
 import {
   GET_INGREDIENTS_REQUEST,
@@ -9,55 +6,22 @@ import {
   GET_INGREDIENTS_FAILED
 } from '../../actions/burger-ingredients'
 import { TIngredients } from '../../../utils/data-types'
+import { initialState } from '../burger-ingredients'
+import { ingredientPlaceholder } from './constants'
 
-const initialState: TBurgerIngredientsState = {
-  ingredients: [],
-  ingredientsRequest: false,
-  ingredientsFailed: false
-}
 const ingredients: TIngredients = [
   {
-    _id: '_id',
-    name: 'name',
-    proteins: 0,
-    fat: 0,
-    carbohydrates: 0,
-    calories: 0,
-    price: 0,
-    image: 'image',
-    image_mobile: 'image_mobile',
-    image_large: 'image_large',
-    __v: 0,
+    ...ingredientPlaceholder,
     type: 'main',
     dragId: '1'
   },
   {
-    _id: '_id',
-    name: 'name',
-    proteins: 0,
-    fat: 0,
-    carbohydrates: 0,
-    calories: 0,
-    price: 0,
-    image: 'image',
-    image_mobile: 'image_mobile',
-    image_large: 'image_large',
-    __v: 0,
+    ...ingredientPlaceholder,
     type: 'main',
     dragId: '2'
   },
   {
-    _id: '_id',
-    name: 'name',
-    proteins: 0,
-    fat: 0,
-    carbohydrates: 0,
-    calories: 0,
-    price: 0,
-    image: 'image',
-    image_mobile: 'image_mobile',
-    image_large: 'image_large',
-    __v: 0,
+    ...ingredientPlaceholder,
     type: 'main',
     dragId: '3'
   }

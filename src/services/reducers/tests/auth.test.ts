@@ -1,4 +1,4 @@
-import { userReducer, TAuthState } from '../auth'
+import { userReducer } from '../auth'
 import { TAuthActions } from '../../types/auth'
 import {
   LOGIN_REQUEST,
@@ -18,32 +18,7 @@ import {
   PATCH_USER_SUCCESS,
   CHECK_USER_AUTH
 } from '../../actions/auth'
-
-const initialState: TAuthState = {
-  user: null,
-
-  loginRequest: false,
-  loginFailed: false,
-  loginError: '',
-
-  registerRequest: false,
-  registerFailed: false,
-  registerError: '',
-
-  getUserRequest: false,
-  getUserFailed: false,
-  getUserError: '',
-
-  patchUserRequest: false,
-  patchUserFailed: false,
-  patchUserError: '',
-
-  logoutRequest: false,
-  logoutFailed: false,
-  logoutError: '',
-
-  isUserAuthChecked: false
-}
+import { initialState } from '../auth'
 
 describe('Redux auth store', () => {
   test('Should return the initial state', () => {
@@ -226,10 +201,6 @@ describe('Redux auth store', () => {
   })
 
   test('Should return state with user after rising logout success action', () => {
-    const user = {
-      email: 'email',
-      name: 'name'
-    }
     expect(
       userReducer(initialState, {
         type: LOGOUT_SUCCESS
