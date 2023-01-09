@@ -5,5 +5,11 @@ type Props = {
 }
 
 export default function ModalOverlay({ closeModal }: Props) {
-  return <div className={style.block} onClick={closeModal}></div>
+  return (
+    <div
+      className={style.block}
+      onClick={closeModal}
+      data-testid="modal-overlay"
+    ></div>
+  )
 }

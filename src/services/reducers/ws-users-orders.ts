@@ -15,7 +15,7 @@ export type TWsState = {
   readonly wsConnect: boolean
 }
 
-const initialState: TWsState = {
+export const initialState: TWsState = {
   data: null,
   wsConnecting: false,
   wsConnectingFailed: false,

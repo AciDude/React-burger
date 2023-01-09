@@ -45,7 +45,7 @@ export function getOrder(
   const requestBody = { ingredients: ingredientsId }
   return function (dispatch) {
     dispatch(getOrderRequest())
-    getOrderAPI(requestBody)
+    return getOrderAPI(requestBody)
       .then(res => {
         dispatch(getOrderSuccess(res.order))
       })

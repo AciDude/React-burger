@@ -64,7 +64,9 @@ const AppHeader = React.memo(function () {
           </ul>
         </nav>
         <div>
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
         </div>
         <div className={style.profile}>
           <Link

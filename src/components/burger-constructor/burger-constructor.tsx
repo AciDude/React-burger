@@ -88,7 +88,11 @@ const BurgerConstructor = function () {
   )
 
   return (
-    <section ref={dropTargetRef} className={style.section}>
+    <section
+      ref={dropTargetRef}
+      className={style.section}
+      data-testid="burger-constructor"
+    >
       {!bun && !fillings.length ? (
         title
       ) : (
@@ -129,6 +133,7 @@ const BurgerConstructor = function () {
                 {total} <CurrencyIcon type="primary" />
               </div>
               <Button
+                data-testid="burger-constructor-order"
                 type="primary"
                 size="medium"
                 htmlType="button"
@@ -144,6 +149,7 @@ const BurgerConstructor = function () {
                 to="/login"
                 state={{ pathname: location.pathname }}
                 className="text_type_main-medium text_color_inactive"
+                data-testid="burger-constructor-auth"
               >
                 Авторизуйтесь
               </Link>{' '}

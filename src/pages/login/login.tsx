@@ -47,6 +47,7 @@ export default function Login() {
           size="medium"
           htmlType="submit"
           disabled={loginRequest}
+          data-testid="login-input"
         >
           Войти
         </Button>

@@ -6,13 +6,13 @@ import {
 import { TIngredients } from '../../utils/data-types'
 import { TBurgerIngredientsActions } from '../types/burger-ingredients'
 
-type TBurgerIngredientsState = {
+export type TBurgerIngredientsState = {
   readonly ingredients: TIngredients
   readonly ingredientsRequest: boolean
   readonly ingredientsFailed: boolean
 }
 
-const initialState: TBurgerIngredientsState = {
+export const initialState: TBurgerIngredientsState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFailed: false
