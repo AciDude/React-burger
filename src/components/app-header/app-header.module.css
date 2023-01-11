@@ -3,29 +3,26 @@
 }
 .container {
    max-width: 1280px;
-   display: grid;
-   grid-template: auto / 1fr min-content 1fr;
    margin: 0 auto;
-   align-items: center;
-   gap: 20px;
+   position: relative;
 }
-@media (max-width: 1094px) {
-   .container {
-      grid-template: auto / repeat(3, auto);
-   }
-}
-.profile {
-   justify-self: end;
-}
+
 .list {
-   display: flex;
+   display: grid;
+   grid-template: auto / repeat(2, auto) 1fr;
+   align-items: center;
 }
+
 .button {
    display: flex;
    align-items: center;
    background-color: transparent;
    border: none;
    border-radius: 28px;
+}
+
+.profile {
+   justify-self: end;
 }
 
 .inactive {
@@ -37,6 +34,38 @@
 }
 
 .active {
-   color: #F2F2F3 !important;
+   color: #F2F2F3;
    cursor: default;
+}
+
+.logo {
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1200px) {
+   .logo {
+      width: 50px;
+      height: 54px;
+      overflow: hidden;
+   } 
+   .logo a {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+   }
+   
+}
+
+@media (max-width: 991px) {
+   .logo {
+      height: 40px;
+      width: 40px;
+   } 
+   .logo a svg {
+      height: 40px;
+   }
 }

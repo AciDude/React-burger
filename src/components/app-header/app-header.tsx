@@ -1,48 +1,46 @@
-import React from 'react'
-import style from './app-header.module.css'
+import React from "react";
+import style from "./app-header.module.css";
 import {
   Logo,
   ProfileIcon,
   BurgerIcon,
-  ListIcon
-} from '@ya.praktikum/react-developer-burger-ui-components'
-import { NavLink, useMatch, Link } from 'react-router-dom'
-import { useSelector } from '../../hooks'
-import { selectUserName } from '../../services/selectors'
+  ListIcon,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { NavLink, useMatch, Link } from "react-router-dom";
+import { useSelector } from "../../hooks";
+import { selectUserName } from "../../services/selectors";
 
 const AppHeader = React.memo(function () {
-  const name = useSelector(selectUserName)
+  const name = useSelector(selectUserName);
   const constructorMatchPath = useMatch({
-    path: '/',
-    end: true
-  })
+    path: "/",
+    end: true,
+  });
   const ordersMatchPath = useMatch({
-    path: '/feed',
-    end: false
-  })
+    path: "/feed",
+    end: false,
+  });
   const profileMatchPath = useMatch({
-    path: '/profile',
-    end: false
-  })
+    path: "/profile",
+    end: false,
+  });
 
-  const setType = (obj: object | null): 'primary' | 'secondary' =>
-    obj ? 'primary' : 'secondary'
+  const setType = (obj: object | null): "primary" | "secondary" =>
+    obj ? "primary" : "secondary";
 
   const classesArray = [
-    'pl-5',
-    'pr-5',
-    'pb-4',
-    'pt-4',
-    'text',
-    'text_type_main-default',
-    'text_color_inactive',
+    "pl-5",
+    "pr-5",
+    "pb-4",
+    "pt-4",
+    "text",
+    "text_type_main-default",
     style.button,
-    style.inactive
-  ]
-  const classes = classesArray.join(' ')
+  ];
+  const classes = classesArray.join(" ");
 
   const setActive = ({ isActive }: { isActive: boolean }): string | undefined =>
-    isActive ? `${classes} ${style.active}` : `${classes} ${style.inactive}`
+    isActive ? `${classes} ${style.active}` : `${classes} ${style.inactive} text_color_inactive`;
 
   return (
     <header className={`${style.header} pt-4 pb-4`}>
@@ -61,25 +59,25 @@ const AppHeader = React.memo(function () {
                 <span className="ml-2">Лента заказов</span>
               </NavLink>
             </li>
+            <li className={style.profile}>
+              <Link
+                to="/profile/orders"
+                className={setActive({ isActive: Boolean(profileMatchPath) })}
+              >
+                <ProfileIcon type={setType(profileMatchPath)} />
+                <span className="ml-2">{name || "Личный кабинет"}</span>
+              </Link>
+            </li>
           </ul>
         </nav>
-        <div>
+        <div className={style.logo}>
           <Link to="/">
             <Logo />
           </Link>
         </div>
-        <div className={style.profile}>
-          <Link
-            to="/profile/orders"
-            className={setActive({ isActive: Boolean(profileMatchPath) })}
-          >
-            <ProfileIcon type={setType(profileMatchPath)} />
-            <span className="ml-2">{name || 'Личный кабинет'}</span>
-          </Link>
-        </div>
       </div>
     </header>
-  )
-})
+  );
+});
 
-export default AppHeader
+export default AppHeader;

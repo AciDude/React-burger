@@ -3,13 +3,12 @@ import style from './profile.module.css'
 import {
   NavLink,
   useNavigate,
-  Outlet,
   useMatch,
   Route,
   Routes
 } from 'react-router-dom'
 import { useDispatch, useSelector } from '../../hooks'
-import { logoutUser } from '../../services/actions/auth'
+import { logoutUser, getUser } from '../../services/actions/auth'
 import {
   connectUsersOrders,
   disconnectUsersOrders
@@ -31,6 +30,7 @@ export default function Profile() {
       : `${linkClasses} ${style.inactive} text_color_inactive`
 
   useEffect(() => {
+    dispatch(getUser())
     dispatch(
       connectUsersOrders(
         `${BASE_WS_URL}orders?token=${getCookie('accessToken')}`

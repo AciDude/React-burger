@@ -1,4 +1,4 @@
-import { rootReducer } from './reducers/reducers'
+import { rootReducer } from './reducers'
 import { configureStore } from '@reduxjs/toolkit'
 import { socketMiddleware } from './middlewares/ws-middleware'
 import { wsAllOrdersActions } from './actions/ws-all-orders'

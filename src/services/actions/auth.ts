@@ -111,13 +111,10 @@ export const loginUser =
   (body: TLogin): AppThunk =>
   dispatch => {
     dispatch(loginRequest())
-    console.log(1)
     return loginAPI(body)
       .then(res => {
-        console.log(2)
         const accessToken = res.accessToken.split('Bearer ')[1]
         const refreshToken = res.refreshToken
-        console.log(3)
         saveTokens(refreshToken, accessToken)
         dispatch(loginSuccess(res.user))
       })

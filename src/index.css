@@ -8,7 +8,6 @@ ul {
 }
 a, a:active, a:hover, a:visited {
   text-decoration: none;
-  color: none;
 }
 #root {
   display: flex;
