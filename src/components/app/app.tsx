@@ -20,8 +20,11 @@ import { selectOrder } from '../../services/selectors'
 import Feed from '../../pages/feed/feed'
 import OrderInfo from '../order-info/order-info'
 import Main from '../../pages/main/main'
+import { ScreenContext } from '../../services/context/screen-context'
+import { useScreenDetails } from '../../hooks/use-screen-width'
 
 function App() {
+  const screenOptions = useScreenDetails()
   const location = useLocation()
   const navigate = useNavigate()
   let background = location.state?.background
@@ -41,6 +44,7 @@ function App() {
 
   return (
     <>
+      <ScreenContext.Provider value={screenOptions}>
       <AppHeader />
       <main className={style.main}>
         <Routes location={background || location}>
@@ -135,6 +139,7 @@ function App() {
           </Route>
         </Routes>
       )}
+      </ScreenContext.Provider>
     </>
   )
 }
